@@ -1,0 +1,8 @@
+{
+"name": "hera",
+"keywords": "esp8266, home, automation, device",
+"description": "Core classes for HERA devices.",
+"repository": null,
+"frameworks": "arduino",
+"platforms": "espressif"
+}
