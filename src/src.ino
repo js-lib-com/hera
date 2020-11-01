@@ -3,14 +3,18 @@
 #include "HERA.h"
 
 //#define __SENSOR__
-//#define __ACTUATOR__
-#define __THERMOSTAT__
+//#define __THERMOSTAT__
+#define __ACTUATOR__
 //#define __ACTION__
 
 #ifdef __SENSOR__
 const char* HOST_NAME = "thermostat-sensor";
-#else
+#endif
+#ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
+#endif
+#ifdef __ACTUATOR__
+const char* HOST_NAME = "actuators";
 #endif
 const char* WIFI_SSID = "DIR-825-A936";
 const char* WIFI_PASSWORD = "mami1964";
@@ -24,7 +28,7 @@ Device* devices[] = {
   new Actuator("actuator-1", D1, DIRECT),
   new Actuator("actuator-2", D2, DIRECT),
   new Actuator("actuator-3", D3, DIRECT),
-  new Actuator("thermostat-actuator", D4, INVERSE)
+  new Actuator("actuator-4", D4, INVERSE)
 #endif
 
 #ifdef __THERMOSTAT__

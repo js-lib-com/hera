@@ -60,6 +60,7 @@ void HERA::setup(Device** _devices, byte _devicesCount) {
 
   Log::debug("Connected to: ", WIFI_SSID);
   Log::debug("WiFi RSSI: ", String(WiFi.RSSI()));
+  Log::debug("MAC address:", WiFi.macAddress());
   Log::debug("IP address: ", WiFi.localIP().toString());
   Log::debug("Host name: ", HOST_NAME);
 
