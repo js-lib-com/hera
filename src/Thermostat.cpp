@@ -63,9 +63,12 @@ String Thermostat::invoke(const String& action, const String& parameter)
   }
   else if (action == "update") {
     updatePort();
+    String state;
+    return updateState(state);
   }
   else if (action == "getState") {
-    return String(port.getState() ? "true" : "false");
+    String state;
+    return updateState(state);
   }
 
   return "";
@@ -86,5 +89,16 @@ void Thermostat::updatePort() {
     MessagePublisher::publishDeviceState(deviceName, port.getState());
     state = currentState;
   }
+}
+
+String& Thermostat::updateState(String& state) {
+    state = "{\"setpoint\":";
+    state += setpoint;
+    state += ",\"temperature\":";
+    state += temperature;
+    state += ",\"running\":";
+    state += (port.getState() ? "true" : "false");
+    state += "}";
+    return state;
 }
 

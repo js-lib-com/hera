@@ -14,6 +14,7 @@ class Thermostat: public Device {
   private:
     void setSetpoint(float setpoint);
     void updatePort();
+    String& updateState(String& state);
 
   private:
     // output port, driver for actuator

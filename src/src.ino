@@ -3,8 +3,8 @@
 #include "HERA.h"
 
 //#define __SENSOR__
-//#define __THERMOSTAT__
-#define __ACTUATOR__
+#define __THERMOSTAT__
+//#define __ACTUATOR__
 //#define __ACTION__
 
 #ifdef __SENSOR__
