@@ -20,6 +20,7 @@ void ThermostatSensor::loop() {
 }
 
 void ThermostatSensor::publish(float temperature) {
+  TemperatureSensor::publish(temperature);
   lastTemperature = temperature;
   controllerAction.exec(temperature);
 }
