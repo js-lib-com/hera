@@ -30,7 +30,7 @@ void Actuator::setup() {
     Log::debug("Read device state from EEPROM: ", deviceName);
     port.setState(E2PROM::read(eepromAddr));
   }
-  
+
   if (!indicatorLED) {
     return;
   }
@@ -53,9 +53,14 @@ String Actuator::invoke(const String& action, const String& parameter) {
     port.setState(0);
     update();
     return "";
- }
+  }
   else if (action == "toggle") {
     port.toggle();
+    update();
+    return "";
+  }
+  else if (action == "setState") {
+    port.setState(parameter.toInt());
     update();
     return "";
   }
