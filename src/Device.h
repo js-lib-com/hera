@@ -16,7 +16,6 @@ class Device {
 
     const char* getName() const;
     const bool isLocal() const;
-    const char* JSON() const;
 
     virtual void setup();
     virtual void loop();
@@ -24,11 +23,7 @@ class Device {
 
   protected:
     const char* deviceName;
-
     bool local;
-
-    // JSON representation of this device instance
-    String json;
 };
 
 inline const bool Device::isLocal() const {
@@ -46,10 +41,6 @@ inline String Device::invoke(const String& action, const String& parameter) {
 
 inline const char* Device::getName() const {
   return deviceName;
-}
-
-inline const char* Device::JSON() const {
-  return json.c_str();
 }
 
 #endif
