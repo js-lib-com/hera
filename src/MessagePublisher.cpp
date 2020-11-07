@@ -3,9 +3,26 @@
 #include <ESP8266HTTPClient.h>
 
 #include "MessagePublisher.h"
+#include "E2PROM.h"
 
 bool MessagePublisher::serialEnabled;
 String MessagePublisher::messageBrokerURL;
+
+void MessagePublisher::init() {
+  serialEnabled = true;
+  E2PROM::read(MessagePublisher::messageBrokerURL);
+  Serial.print("messageBrokerURL: ");
+  Serial.println(messageBrokerURL);
+}
+
+void MessagePublisher::subscribe(const String& _messageBrokerURL) {
+  if (messageBrokerURL != _messageBrokerURL) {
+    messageBrokerURL = _messageBrokerURL;
+    Serial.print("Update message broker URL: ");
+    Serial.println(messageBrokerURL);
+    E2PROM::write(messageBrokerURL);
+  }
+}
 
 void MessagePublisher::publishDeviceState(const char* deviceName, float value) {
   if (!messageBrokerURL.length()) {
@@ -67,10 +84,7 @@ void MessagePublisher::publish(const String& message) {
   if (statusCode != 204) {
     if (serialEnabled) {
       Serial.println("Publish error: " + String(statusCode));
-      Serial.println("Remove message broker URL");
     }
-    messageBrokerURL.remove(0);
   }
 }
-
 

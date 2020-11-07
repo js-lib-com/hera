@@ -5,9 +5,9 @@
 
 class MessagePublisher {
   public:
-    static void enableSerial();
-
+    static void init();
     static void subscribe(const String& messageBrokerURL);
+    
     static void publishDeviceState(const char* deviceName, float value);
     static void publishLogRecord(const char* level, const char* message);
 
@@ -18,17 +18,6 @@ class MessagePublisher {
     static bool serialEnabled;
     static String messageBrokerURL;
 };
-
-inline void MessagePublisher::enableSerial() {
-  serialEnabled = true;
-}
-
-inline void MessagePublisher::subscribe(const String& _messageBrokerURL) {
-  if (!messageBrokerURL.length()) {
-    Serial.println("Update message broker URL");
-    messageBrokerURL = _messageBrokerURL;
-  }
-}
 
 #endif
 
