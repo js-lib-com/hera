@@ -84,10 +84,10 @@ void Thermostat::updatePort() {
   Log::trace("Thermostat::updatePort()");
   byte currentState = setpoint > temperature ? 1 : 0;
   if (state != currentState) {
+    state = currentState;
     Log::debug("port.setState: " + String(currentState));
     port.setState(currentState);
-    MessagePublisher::publishDeviceState(deviceName, port.getState());
-    state = currentState;
+    MessagePublisher::publishDeviceState(deviceName, currentState);
   }
 }
 
