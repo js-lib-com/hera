@@ -84,8 +84,8 @@ void HERA::setup(Device** _devices, byte _devicesCount) {
     Log::error("Error setting up MDNS");
   }
 
-  http.on("/subscribe.rmi", SubscribeHandler);
-  http.on("/invoke.rmi", InvokeHandler);
+  http.on("/js/hera/dev/HostSystem/subscribe.rmi", SubscribeHandler);
+  http.on("/js/hera/dev/HostSystem/invoke.rmi", InvokeHandler);
 
   http.begin();
   Log::debug("HTTP server started");
