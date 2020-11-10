@@ -16,6 +16,7 @@
 #include "TemperatureSensor.h"
 #include "Thermostat.h"
 #include "ThermostatSensor.h"
+#include "PowerMeter.h"
 
 extern const char* HOST_NAME;
 extern const char* WIFI_SSID;

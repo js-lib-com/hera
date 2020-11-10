@@ -3,9 +3,10 @@
 #include "HERA.h"
 
 //#define __SENSOR__
-#define __THERMOSTAT__
+//#define __THERMOSTAT__
 //#define __ACTUATOR__
 //#define __ACTION__
+#define __POWER_METER__
 
 #ifdef __SENSOR__
 const char* HOST_NAME = "thermostat-sensor";
@@ -16,6 +17,10 @@ const char* HOST_NAME = "thermostat";
 #ifdef __ACTUATOR__
 const char* HOST_NAME = "actuators";
 #endif
+#ifdef __POWER_METER__
+const char* HOST_NAME = "power-meter";
+#endif
+
 const char* WIFI_SSID = "DIR-825-A936";
 const char* WIFI_PASSWORD = "mami1964";
 
@@ -34,6 +39,10 @@ Device* devices[] = {
 #ifdef __THERMOSTAT__
   //  new Actuator("thermostat-actuator", D2, DIRECT)
   new Thermostat("thermostat", D2, INVERSE)
+#endif
+
+#ifdef __POWER_METER__
+  new PowerMeter("power-meter", 4) 
 #endif
 };
 
