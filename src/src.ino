@@ -6,7 +6,8 @@
 //#define __THERMOSTAT__
 //#define __ACTUATOR__
 //#define __ACTION__
-#define __POWER_METER__
+//#define __POWER_METER__
+#define __NET_SWITCH__
 
 #ifdef __SENSOR__
 const char* HOST_NAME = "thermostat-sensor";
@@ -19,6 +20,9 @@ const char* HOST_NAME = "actuators";
 #endif
 #ifdef __POWER_METER__
 const char* HOST_NAME = "power-meter";
+#endif
+#ifdef __NET_SWITCH__
+const char* HOST_NAME = "net-switch";
 #endif
 
 const char* WIFI_SSID = "DIR-825-A936";
@@ -42,7 +46,11 @@ Device* devices[] = {
 #endif
 
 #ifdef __POWER_METER__
-  new PowerMeter("power-meter", 4) 
+  new PowerMeter("power-meter", 4)
+#endif
+
+#ifdef __NET_SWITCH__
+  new NetSwitch("net-switch", "actuator-4", D4)
 #endif
 };
 
