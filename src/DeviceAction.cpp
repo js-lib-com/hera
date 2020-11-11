@@ -11,6 +11,7 @@ DeviceAction::DeviceAction(const char* _deviceName, const char* _action):
 {
   client.setTimeout(2000);
   retries = 0;
+  statusCode = 0;
 }
 
 bool DeviceAction::invoke() {
@@ -70,17 +71,17 @@ bool DeviceAction::_invoke() {
     return false;
   }
   client.addHeader("Content-Type", "application/json", true);
-  statusCodeValue = client.POST(arguments);
+  statusCode = client.POST(arguments);
   resultValue = client.getString();
   client.end();
 
-  Log::debug("Status code: ", String(statusCodeValue));
+  Log::debug("Status code: ", String(statusCode));
   ESP.wdtEnable(0);
 
-  if (statusCodeValue == 200) {
+  if (statusCode == 200) {
     return true;
   }
-  if (statusCodeValue == 204) {
+  if (statusCode == 204) {
     resultValue.remove(0);
     return true;
   }

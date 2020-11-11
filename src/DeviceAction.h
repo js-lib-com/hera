@@ -14,7 +14,7 @@ class DeviceAction {
     bool exec(const String& argument);
 
     const String& value();
-    int statusCode();
+    int status();
     bool error();
     void retry(int retries);
 
@@ -31,7 +31,7 @@ class DeviceAction {
     IPAddress address;
     String argument;
     String resultValue;
-    int statusCodeValue;
+    int statusCode;
 
     int retries;
 };
@@ -64,12 +64,12 @@ inline const String& DeviceAction::value() {
   return resultValue;
 }
 
-inline int DeviceAction::statusCode() {
-  return statusCodeValue;
+inline int DeviceAction::status() {
+  return statusCode;
 }
 
 inline bool DeviceAction::error() {
-  return statusCodeValue < 200 || statusCodeValue >= 300;
+  return statusCode != 0 && (statusCode < 200 || statusCode >= 300);
 }
 
 #endif // __HERA_DEVICE_ACTION
