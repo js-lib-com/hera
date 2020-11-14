@@ -13,14 +13,7 @@
 #include "HERA.h"
 
 HERA hera;
-
-void SubscribeHandler() {
-  hera.onSubscribe();
-}
-
-void InvokeHandler() {
-  hera.onInvoke();
-}
+const char* HERA_VERSION = "HERA v1.1 build 11/14/20";
 
 ESP8266WebServer http(SERVER_PORT);
 
@@ -38,8 +31,7 @@ void HERA::setup(Device** _devices, byte _devicesCount) {
 
   Serial.begin(115200);
   Serial.println();
-  Serial.println("HERA v1.0");
-  Serial.println();
+  Serial.println(HERA_VERSION);
 
   MessagePublisher::init();
   Log::trace("HERA::setup");
@@ -84,8 +76,15 @@ void HERA::setup(Device** _devices, byte _devicesCount) {
     Log::error("Error setting up MDNS");
   }
 
-  http.on("/js/hera/dev/HostSystem/subscribe.rmi", SubscribeHandler);
-  http.on("/js/hera/dev/HostSystem/invoke.rmi", InvokeHandler);
+  http.on("/js/hera/dev/HostSystem/subscribe.rmi", [this]() {
+    this->onSubscribe();
+  });
+  http.on("/js/hera/dev/HostSystem/invoke.rmi", [this]() {
+    this->onInvoke();
+  });
+  http.on("/js/hera/dev/HostSystem/version.rmi", [this]() {
+    this->onVersion();
+  });
 
   http.begin();
   Log::debug("HTTP server started");
@@ -147,6 +146,11 @@ void HERA::onInvoke() {
   }
 
   sendServerError();
+}
+
+void HERA::onVersion() {
+  Log::trace("onVersion()");
+  sendResult(HERA_VERSION);
 }
 
 // --------------------------------------------------------------------------

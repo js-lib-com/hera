@@ -32,6 +32,7 @@ class HERA {
   public:
     void onSubscribe();
     void onInvoke();
+    void onVersion();
 
   private:
     void advertise(IPAddress address, int port);
