@@ -67,6 +67,8 @@ String Actuator::invoke(const String& action, const String& parameter) {
   else if (action == "getState") {
     return String(port.getState() ? "true" : "false");
   }
+
+  return Device::invoke(action, parameter);
 }
 
 void Actuator::update() {

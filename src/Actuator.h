@@ -9,8 +9,8 @@
 
 class Actuator: public Device {
   public:
-    Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr=NO_EEPROM);
-    Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr=NO_EEPROM);
+    Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr = NO_EEPROM);
+    Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
     void setup();
     String invoke(const String& action, const String& parameter = "");

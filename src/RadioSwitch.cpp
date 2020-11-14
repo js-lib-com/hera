@@ -41,8 +41,4 @@ void RadioSwitch::loop()
   }
 }
 
-String RadioSwitch::invoke(const String& action, const String& parameter)
-{
-  return "";
-}
 

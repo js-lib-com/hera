@@ -62,6 +62,8 @@ String TemperatureSensor::invoke(const String& action, const String& parameter) 
   else if (action == "readValue") {
     return String(readTemperature());
   }
+  
+  return Device::invoke(action, parameter);
 }
 
 float TemperatureSensor::readTemperature() {

@@ -6,8 +6,8 @@
 //#define __THERMOSTAT__
 //#define __ACTUATOR__
 //#define __ACTION__
-//#define __POWER_METER__
-#define __NET_SWITCH__
+#define __POWER_METER__
+//#define __NET_SWITCH__
 
 #ifdef __SENSOR__
 const char* HOST_NAME = "thermostat-sensor";
@@ -46,11 +46,11 @@ Device* devices[] = {
 #endif
 
 #ifdef __POWER_METER__
-  new PowerMeter("power-meter", 4)
+  new PowerMeter("power-meter", D4)
 #endif
 
 #ifdef __NET_SWITCH__
-  new NetSwitch("net-switch", "actuator-4", D4)
+  new NetSwitch("net-switch", "actuator-4", D4),
 #endif
 };
 

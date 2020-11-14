@@ -40,6 +40,6 @@ String NetSwitch::invoke(const String& action, const String& parameter) {
   if (action == "getState") {
     return String(pressedCounter);
   }
-  return "";
+  return Device::invoke(action, parameter);
 }
 

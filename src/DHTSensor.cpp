@@ -39,5 +39,7 @@ String DHTSensor::invoke(const String& action, const String& parameter) {
     response += "}";
     return response;
   }
+  
+  return Device::invoke(action, parameter);
 }
 

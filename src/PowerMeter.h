@@ -9,7 +9,6 @@ class PowerMeter : public Device {
 
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
 
   public:
     void onPulse();

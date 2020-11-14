@@ -32,6 +32,7 @@ String ContactSwitch::invoke(const String& action, const String& parameter)
     byte state = digitalRead(port);
     return String(state ? "true" : "false");
   }
-  return "";
+  
+  return Device::invoke(action, parameter);
 }
 

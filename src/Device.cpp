@@ -12,3 +12,7 @@ Device::Device(const char* deviceClass, const char* deviceName):
   local = false;
 }
 
+String Device::invoke(const String& action, const String& parameter) {
+  return "";
+}
+

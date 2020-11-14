@@ -10,7 +10,6 @@ class RadioSwitch: public Device {
 
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
 
   private:
     const byte port;

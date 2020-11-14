@@ -36,9 +36,6 @@ inline void Device::setup() {
 inline void Device::loop() {
 }
 
-inline String Device::invoke(const String& action, const String& parameter) {
-}
-
 inline const char* Device::getName() const {
   return deviceName;
 }

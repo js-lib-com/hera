@@ -70,8 +70,8 @@ String Thermostat::invoke(const String& action, const String& parameter)
     String state;
     return updateState(state);
   }
-
-  return "";
+  
+  return Device::invoke(action, parameter);
 }
 
 void Thermostat::setSetpoint(float _setpoint) {

@@ -42,16 +42,6 @@ void PowerMeter::loop()
   }
 }
 
-String PowerMeter::invoke(const String& action, const String& parameter) {
-  Log::trace("PowerMeter::invoke");
-
-  if (action == "test") {
-    return "OK";
-  }
-
-  return "";
-}
-
 void PowerMeter::onPulse() {
   lastTime = pulseTime;
   pulseTime = micros();

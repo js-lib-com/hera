@@ -82,7 +82,8 @@ String BinaryLight::invoke(const String& action, const String& parameter)
   else if (action == "getState") {
     return String(bulb.getState() ? "true" : "false");
   }
-  return "";
+  
+  return Device::invoke(action, parameter);
 }
 
 void BinaryLight::update() {

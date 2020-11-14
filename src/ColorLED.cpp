@@ -56,6 +56,8 @@ String ColorLED::invoke(const String& action, const String& parameter) {
   else if (action == "getColor") {
     return String((red & 0xff) << 16 | (green & 0xff) << 8 | (blue & 0xff));
   }
+
+  return Device::invoke(action, parameter);
 }
 
 void ColorLED::update() {

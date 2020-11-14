@@ -40,6 +40,7 @@ String LightDimmer::invoke(const String& action, const String& parameter)
   else if (action == "getValue") {
     return String(value);
   }
-  return "";
+  
+  return Device::invoke(action, parameter);
 }
 
