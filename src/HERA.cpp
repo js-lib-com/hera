@@ -13,7 +13,7 @@
 #include "HERA.h"
 
 HERA hera;
-const char* HERA_VERSION = "HERA v1.1 build 11/14/20";
+const char* HERA_VERSION = "HERA v1.2 build 11/14/20";
 
 ESP8266WebServer http(SERVER_PORT);
 
@@ -130,7 +130,7 @@ void HERA::onInvoke() {
   RequestBody requestBody(http.arg("plain"));
   Log::debug("Device name: ", requestBody.getDeviceName());
   Log::debug("Action name: ", requestBody.getActionName());
-  Log::debug("Parameter  : ", requestBody.getParameter());
+  Log::debug("Parameter: ", requestBody.getParameter());
 
   // ["device-name","action-name","param_1","param_2",..."param_j"]
 
@@ -145,7 +145,7 @@ void HERA::onInvoke() {
     }
   }
 
-  sendServerError();
+  sendServerError("Device not found: " + requestBody.getDeviceName());
 }
 
 void HERA::onVersion() {
@@ -173,8 +173,9 @@ void HERA::sendResult(const String& result) {
   }
 }
 
-void HERA::sendServerError() {
-  Log::trace("sendServerError");
-  http.setContentLength(0);
-  http.send(500, "text/plain");
+void HERA::sendServerError(const String& error) {
+  Log::debug("Send server error: ", error.c_str());
+  http.setContentLength(error.length());
+  http.send(500, "text/plain", error);
 }
+

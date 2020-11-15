@@ -38,7 +38,7 @@ class HERA {
     void advertise(IPAddress address, int port);
     void sendVoid();
     void sendResult(const String& result);
-    void sendServerError();
+    void sendServerError(const String& error);
 
   private:
     Device** devices;
