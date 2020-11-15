@@ -6,23 +6,36 @@
 
 #define EEPROM_BUFFER_SIZE 32
 #define EEPROM_STR_BUFFER_SIZE 100
+#define EEPROM_ADDR_OFFSET EEPROM_STR_BUFFER_SIZE + 1
 #define NO_EEPROM (byte)255
 
 class E2PROM {
   public:
     static unsigned char read(unsigned char addr) {
       EEPROM.begin(EEPROM_BUFFER_SIZE);
-      unsigned char value = EEPROM.read(addr);
+      unsigned char value = EEPROM.read(EEPROM_ADDR_OFFSET + addr);
       EEPROM.end();
       return value;
     }
 
     static void write(unsigned char addr, unsigned char value) {
       EEPROM.begin(EEPROM_BUFFER_SIZE);
-      EEPROM.write(addr, value);
+      EEPROM.write(EEPROM_ADDR_OFFSET + addr, value);
       EEPROM.end();
     }
 
+    static void get(unsigned char addr, float& reference) {
+      EEPROM.begin(EEPROM_BUFFER_SIZE);
+      EEPROM.get(EEPROM_ADDR_OFFSET + addr, reference);
+      EEPROM.end();
+    }
+
+    static void put(unsigned char addr, float value) {
+      EEPROM.begin(EEPROM_BUFFER_SIZE);
+      EEPROM.put(EEPROM_ADDR_OFFSET + addr, value);
+      EEPROM.end();
+    }
+    
     static void read(String& string) {
       EEPROM.begin(EEPROM_STR_BUFFER_SIZE);
       for (unsigned char addr = 0; addr < EEPROM_STR_BUFFER_SIZE; ++addr) {
@@ -43,18 +56,6 @@ class E2PROM {
         EEPROM.write(addr, string.charAt(addr));
       }
       EEPROM.write(addr, 0);
-      EEPROM.end();
-    }
-
-    static void get(unsigned char addr, float& reference) {
-      EEPROM.begin(EEPROM_BUFFER_SIZE);
-      EEPROM.get(addr, reference);
-      EEPROM.end();
-    }
-
-    static void put(unsigned char addr, float value) {
-      EEPROM.begin(EEPROM_BUFFER_SIZE);
-      EEPROM.put(addr, value);
       EEPROM.end();
     }
 };
