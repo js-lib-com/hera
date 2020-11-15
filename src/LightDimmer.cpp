@@ -15,6 +15,7 @@ void LightDimmer::setup() {
   Log::trace("LightDimmer::setup");
   if (eepromAddr != NO_EEPROM) {
     value = E2PROM::read(eepromAddr);
+    update();
   }
 }
 
@@ -28,19 +29,23 @@ String LightDimmer::invoke(const String& action, const String& parameter)
 
   if (action == "updateValue") {
     value = parameter.toInt();
-    analogWrite(port, value);
+    update();
   }
   else if (action == "setValue") {
     value = parameter.toInt();
     if (eepromAddr != NO_EEPROM) {
       E2PROM::write(eepromAddr, value);
     }
-    analogWrite(port, value);
+    update();
   }
   else if (action == "getValue") {
     return String(value);
   }
-  
+
   return Device::invoke(action, parameter);
+}
+
+void LightDimmer::update() {
+  analogWrite(port, 1023 * value / 255);
 }
 

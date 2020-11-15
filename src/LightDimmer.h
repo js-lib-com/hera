@@ -13,6 +13,9 @@ class LightDimmer : public Device {
     String invoke(const String& action, const String& parameter = "");
 
   private:
+    void update();
+
+  private:
     // pwm port
     byte port;
 
