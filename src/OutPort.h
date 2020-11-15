@@ -16,6 +16,7 @@ class OutPort {
     void setState(byte state);
     byte getState();
     void toggle();
+    const char* toString();
 
   private:
     byte port;
@@ -28,6 +29,10 @@ inline byte OutPort::getState() {
 
 inline void OutPort::toggle() {
   setState(!getState());
+}
+
+inline const char* OutPort::toString() {
+  return getState() ? "ON" : "OFF";
 }
 
 #endif
