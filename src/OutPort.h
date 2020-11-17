@@ -32,7 +32,7 @@ inline void OutPort::toggle() {
 }
 
 inline const char* OutPort::toString() {
-  return getState() ? "ON" : "OFF";
+  return getState() ? "true" : "false";
 }
 
 #endif

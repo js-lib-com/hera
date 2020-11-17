@@ -8,14 +8,17 @@ class TemperatureSensor: public Device {
   public:
     TemperatureSensor(const char* deviceName, byte sensorAddress, byte period = 1, float threshold = 0, float offset = 0);
 
+    void ctor();
     void setup();
     virtual void loop();
-    String invoke(const String& action, const String& parameter = "");
 
   protected:
     TemperatureSensor(const char* deviceClass, const char* deviceName, byte sensorAddress, byte period, float threshold, float offset);
     virtual void publish(float temperature);
-    
+
+    String getValue(const String& parameter);
+    String readValue(const String& parameter);
+
   private:
     float readTemperature();
 
@@ -40,7 +43,16 @@ class TemperatureSensor: public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
+
+inline String TemperatureSensor::getValue(const String& parameter) {
+  return String(compensatedTemperature);
+}
+
+inline String TemperatureSensor::readValue(const String& parameter) {
+  return String(readTemperature());
+}
 
 #endif
 

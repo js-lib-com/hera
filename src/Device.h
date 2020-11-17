@@ -3,6 +3,16 @@
 
 #include <Arduino.h>
 
+class Device;
+typedef String(Device::*ActionHandler)(const String&);
+
+typedef struct {
+  const char* name;
+  ActionHandler handler;
+} Action;
+
+#define ACTION(name,handler) {name,(ActionHandler)handler}
+
 class Device {
   public:
     /**
@@ -21,8 +31,13 @@ class Device {
     virtual void loop();
     virtual String invoke(const String& action, const String& parameter = "");
 
+  private:
+    String getActions(const String& parameter);
+
   protected:
     const char* deviceName;
+    Action* actions;
+    int actionsCount;
     bool local;
 };
 

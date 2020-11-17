@@ -2,6 +2,11 @@
 #include "Log.h"
 
 const char* LightDimmer::deviceClass = "js.hera.dev.LightDimmer";
+Action LightDimmer::metaActions[] = {
+  ACTION("updateValue", &LightDimmer::updateValue),
+  ACTION("setValue", &LightDimmer::setValue),
+  ACTION("getValue", &LightDimmer::getValue),
+};
 
 LightDimmer::LightDimmer(const char* deviceName, byte port, byte eepromAddr):
   Device(deviceClass, deviceName),
@@ -9,6 +14,8 @@ LightDimmer::LightDimmer(const char* deviceName, byte port, byte eepromAddr):
   value(0),
   eepromAddr(eepromAddr)
 {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void LightDimmer::setup() {
@@ -19,33 +26,18 @@ void LightDimmer::setup() {
   }
 }
 
-void LightDimmer::loop()
-{
+String LightDimmer::updateValue(const String& parameter) {
+  value = parameter.toInt();
+  update();
+  return getValue(parameter);
 }
 
-String LightDimmer::invoke(const String& action, const String& parameter)
-{
-  Log::trace("LightDimmer::invoke");
-
-  if (action == "updateValue") {
-    value = parameter.toInt();
-    update();
+String LightDimmer::setValue(const String& parameter) {
+  value = parameter.toInt();
+  if (eepromAddr != NO_EEPROM) {
+    E2PROM::write(eepromAddr, value);
   }
-  else if (action == "setValue") {
-    value = parameter.toInt();
-    if (eepromAddr != NO_EEPROM) {
-      E2PROM::write(eepromAddr, value);
-    }
-    update();
-  }
-  else if (action == "getValue") {
-    return String(value);
-  }
-
-  return Device::invoke(action, parameter);
-}
-
-void LightDimmer::update() {
-  analogWrite(port, 1023 * value / 255);
+  update();
+  return getValue(parameter);
 }
 

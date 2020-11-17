@@ -3,11 +3,16 @@
 #include "Log.h"
 
 const char* ContactSwitch::deviceClass = "js.hera.dev.ContactSwitch";
+Action ContactSwitch::metaActions[] = {
+  ACTION("isOpened", &ContactSwitch::isOpened),
+};
 
 ContactSwitch::ContactSwitch(const char* deviceName, byte port):
   Device(deviceClass, deviceName),
   port(port)
 {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void ContactSwitch::setup()
@@ -24,15 +29,5 @@ void ContactSwitch::loop()
     state = currentState;
     MessagePublisher::publishDeviceState(deviceName, state);
   }
-}
-
-String ContactSwitch::invoke(const String& action, const String& parameter)
-{
-  if (action == "isOpened") {
-    byte state = digitalRead(port);
-    return String(state ? "true" : "false");
-  }
-  
-  return Device::invoke(action, parameter);
 }
 

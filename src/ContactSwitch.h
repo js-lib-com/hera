@@ -10,7 +10,9 @@ class ContactSwitch: public Device {
 
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String isOpened(const String& parameter);
 
   private:
     // input port that reads the status of the wall switch
@@ -21,7 +23,12 @@ class ContactSwitch: public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
+
+inline String ContactSwitch::isOpened(const String& parameter) {
+  return digitalRead(port) ? "true" : "false";
+}
 
 #endif
 

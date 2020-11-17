@@ -8,10 +8,15 @@
 #define INVALID_TEMPERATURE -273.15
 
 const char* TemperatureSensor::deviceClass = "js.hera.dev.TemperatureSensor";
+Action TemperatureSensor::metaActions[] = {
+  ACTION("getValue", &TemperatureSensor::getValue),
+  ACTION("readValue", &TemperatureSensor::readValue),
+};
 
 TemperatureSensor::TemperatureSensor(const char* deviceName, byte sensorAddress, byte period, float threshold, float offset):
   TemperatureSensor(deviceClass, deviceName, sensorAddress, period, threshold, offset)
 {
+  ctor();
 }
 
 TemperatureSensor::TemperatureSensor(const char* deviceClass, const char* deviceName, byte sensorAddress, byte period, float threshold, float offset):
@@ -23,6 +28,12 @@ TemperatureSensor::TemperatureSensor(const char* deviceClass, const char* device
 {
   compensatedTemperature = 0;
   timestamp = 0;
+  ctor();
+}
+
+void TemperatureSensor::ctor() {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void TemperatureSensor::setup() {
@@ -51,19 +62,6 @@ void TemperatureSensor::loop() {
 
 void TemperatureSensor::publish(float temperature) {
   MessagePublisher::publishDeviceState(deviceName, temperature);
-}
-
-String TemperatureSensor::invoke(const String& action, const String& parameter) {
-  Log::trace("TemperatureSensor::invoke");
-
-  if (action == "getValue") {
-    return String(compensatedTemperature);
-  }
-  else if (action == "readValue") {
-    return String(readTemperature());
-  }
-  
-  return Device::invoke(action, parameter);
 }
 
 float TemperatureSensor::readTemperature() {

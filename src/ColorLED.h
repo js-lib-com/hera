@@ -9,8 +9,10 @@ class ColorLED: public Device {
     ColorLED(const char* deviceName, byte redPort, byte greenPort, byte bluePort, byte eepromAddr = NO_EEPROM);
 
     void setup();
-    String invoke(const String& action, const String& parameter = "");
-    virtual const char* getDeviceClass() const;
+
+  protected:
+    String setColor(const String& parameter);
+    String getColor(const String& parameter);
 
   private:
     void update();
@@ -29,9 +31,11 @@ class ColorLED: public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
 
-inline const char* ColorLED::getDeviceClass() const {
-  return deviceClass;
+inline String ColorLED::getColor(const String& parameter) {
+  return String((red & 0xff) << 16 | (green & 0xff) << 8 | (blue & 0xff));
 }
+
 #endif

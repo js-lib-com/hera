@@ -12,12 +12,18 @@ class Actuator: public Device {
     Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr = NO_EEPROM);
     Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
+    void ctor();
     void setup();
-    String invoke(const String& action, const String& parameter = "");
-    virtual const char* getDeviceClass() const;
+
+  protected:
+    String turnON(const String& parameter);
+    String turnOFF(const String& parameter);
+    String toggle(const String& parameter);
+    String setState(const String& parameter);
+    String getState(const String& parameter);
 
   private:
-    void update();
+    const char* update();
 
   private:
     // output port, driver for actuator
@@ -37,10 +43,31 @@ class Actuator: public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
 
-inline const char* Actuator::getDeviceClass() const {
-  return deviceClass;
+inline String Actuator::turnON(const String& parameter) {
+  port.setState(1);
+  return update();
+}
+
+inline String Actuator::turnOFF(const String& parameter) {
+  port.setState(0);
+  return update();
+}
+
+inline String Actuator::toggle(const String& parameter) {
+  port.toggle();
+  return update();
+}
+
+inline String Actuator::setState(const String& parameter) {
+  port.setState(parameter.toInt());
+  return update();
+}
+
+inline String Actuator::getState(const String& parameter) {
+  return port.toString();
 }
 
 #endif

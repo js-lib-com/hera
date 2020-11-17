@@ -10,16 +10,22 @@
 
 class BinaryLight : public Device {
   public:
-    BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode, byte eepromAddr=NO_EEPROM);
-    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte eepromAddr=NO_EEPROM);
-    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr=NO_EEPROM);
+    BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
+    void ctor();
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String turnON(const String& parameter);
+    String turnOFF(const String& parameter);
+    String toggle(const String& parameter);
+    String getState(const String& parameter);
 
   private:
-    void update();
+    const char* update();
 
   private:
     // input port that reads the status of the wall switch
@@ -39,11 +45,30 @@ class BinaryLight : public Device {
 
     // EEPROM address to persist this binary lights state
     byte eepromAddr;
-    
+
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
 
-#endif
+inline String BinaryLight::turnON(const String& parameter) {
+  bulb.setState(1);
+  return update();
+}
 
+inline String BinaryLight::turnOFF(const String& parameter) {
+  bulb.setState(0);
+  return update();
+}
+
+inline String BinaryLight::toggle(const String& parameter) {
+  bulb.toggle();
+  return update();
+}
+
+inline String BinaryLight::getState(const String& parameter) {
+  return bulb.toString();
+}
+
+#endif
 

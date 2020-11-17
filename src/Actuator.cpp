@@ -2,6 +2,13 @@
 #include "Log.h"
 
 const char* Actuator::deviceClass = "js.hera.dev.Actuator";
+Action Actuator::metaActions[] = {
+  ACTION("turnON", &Actuator::turnON),
+  ACTION("turnOFF", &Actuator::turnOFF),
+  ACTION("toggle", &Actuator::toggle),
+  ACTION("setState", &Actuator::setState),
+  ACTION("getState", &Actuator::getState)
+};
 
 Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr):
   Device(deviceClass, deviceName),
@@ -11,6 +18,7 @@ Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte eepr
   ledOffColor(0),
   eepromAddr(eepromAddr)
 {
+  ctor();
 }
 
 Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
@@ -21,6 +29,12 @@ Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte indi
   eepromAddr(eepromAddr)
 {
   indicatorLED = new Adafruit_NeoPixel(1, indicatorPort, NEO_GRB + NEO_KHZ800);
+  ctor();
+}
+
+void Actuator::ctor() {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void Actuator::setup() {
@@ -41,37 +55,7 @@ void Actuator::setup() {
   indicatorLED->show();
 }
 
-String Actuator::invoke(const String& action, const String& parameter) {
-  Log::trace("Actuator::invoke");
-
-  if (action == "turnON") {
-    port.setState(1);
-    update();
-    return "";
-  }
-  else if (action == "turnOFF") {
-    port.setState(0);
-    update();
-    return "";
-  }
-  else if (action == "toggle") {
-    port.toggle();
-    update();
-    return "";
-  }
-  else if (action == "setState") {
-    port.setState(parameter.toInt());
-    update();
-    return "";
-  }
-  else if (action == "getState") {
-    return String(port.getState() ? "true" : "false");
-  }
-
-  return Device::invoke(action, parameter);
-}
-
-void Actuator::update() {
+const char* Actuator::update() {
   if (eepromAddr != NO_EEPROM) {
     Log::debug("Write device state to EEPROM: ", deviceName);
     E2PROM::write(eepromAddr, port.getState());
@@ -82,6 +66,7 @@ void Actuator::update() {
     indicatorLED->setPixelColor(0, port.getState() == 0 ? ledOffColor : ledOnColor);
     indicatorLED->show();
   }
+  return port.toString();
 }
 
 

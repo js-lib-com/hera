@@ -9,14 +9,18 @@ class DHTSensor: public Device {
     DHTSensor(const char* deviceName, byte port, byte type = DHT22);
 
     void setup();
-    void loop();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String getHumidity(const String& parameter);
+    String getTemperature(const String& parameter);
+    String getValue(const String& parameter);
 
   private:
     DHT sensor;
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
 
 #endif // __HERA_DHT_SENSOR

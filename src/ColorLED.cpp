@@ -6,6 +6,10 @@
 #define ADDR_BLUE 2
 
 const char* ColorLED::deviceClass = "js.hera.dev.ColorLED";
+Action ColorLED::metaActions[] = {
+  ACTION("setColor", &ColorLED::setColor),
+  ACTION("getColor", &ColorLED::getColor),
+};
 
 ColorLED::ColorLED(const char* deviceName, byte redPort, byte greenPort, byte bluePort, byte eepromAddr):
   Device(deviceClass, deviceName),
@@ -17,6 +21,8 @@ ColorLED::ColorLED(const char* deviceName, byte redPort, byte greenPort, byte bl
   blue(0),
   eepromAddr(eepromAddr)
 {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void ColorLED::setup() {
@@ -34,30 +40,22 @@ void ColorLED::setup() {
   }
 }
 
-String ColorLED::invoke(const String& action, const String& parameter) {
-  Log::trace("ColorLED::invoke");
-  if (action == "setColor") {
-    uint32_t color = parameter.toInt();
+String ColorLED::setColor(const String& parameter) {
+  uint32_t color = parameter.toInt();
 
-    red = (color >> 16) & 0xff;
-    green = (color >> 8) & 0xff;
-    blue = (color) & 0xff;
+  red = (color >> 16) & 0xff;
+  green = (color >> 8) & 0xff;
+  blue = (color) & 0xff;
 
-    if (eepromAddr != NO_EEPROM) {
-      Log::debug("Write device state to EEPROM: ", deviceName);
-      E2PROM::write(eepromAddr + ADDR_RED, red);
-      E2PROM::write(eepromAddr + ADDR_GREEN, green);
-      E2PROM::write(eepromAddr + ADDR_BLUE, blue);
-    }
-
-    update();
-    return "";
-  }
-  else if (action == "getColor") {
-    return String((red & 0xff) << 16 | (green & 0xff) << 8 | (blue & 0xff));
+  if (eepromAddr != NO_EEPROM) {
+    Log::debug("Write device state to EEPROM: ", deviceName);
+    E2PROM::write(eepromAddr + ADDR_RED, red);
+    E2PROM::write(eepromAddr + ADDR_GREEN, green);
+    E2PROM::write(eepromAddr + ADDR_BLUE, blue);
   }
 
-  return Device::invoke(action, parameter);
+  update();
+  return getColor(parameter);
 }
 
 void ColorLED::update() {

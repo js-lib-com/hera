@@ -5,12 +5,23 @@
 #include "Log.h"
 
 const char* Thermostat::deviceClass = "js.hera.dev.Thermostat";
+Action Thermostat::metaActions[] = {
+  ACTION("updateSetpoint", &Thermostat::updateSetpoint),
+  ACTION("setSetpoint", &Thermostat::setSetpoint),
+  ACTION("getSetpoint", &Thermostat::getSetpoint),
+  ACTION("setTemperature", &Thermostat::setTemperature),
+  ACTION("getTemperature", &Thermostat::getTemperature),
+  ACTION("update", &Thermostat::update),
+  ACTION("getState", &Thermostat::getState),
+};
 
 Thermostat::Thermostat(const char* deviceName, byte port, OutMode outMode, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
   eepromAddr(eepromAddr)
 {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void Thermostat::setup() {
@@ -40,44 +51,42 @@ void Thermostat::setup() {
   Log::debug("temperature: ", temperature);
 }
 
-String Thermostat::invoke(const String& action, const String& parameter)
-{
-  Log::trace("Thermostat::invoke");
-
-  if (action == "updateSetpoint") {
-    setSetpoint(parameter.toFloat());
-    updatePort();
-  }
-  else if (action == "setSetpoint")  {
-    setSetpoint(parameter.toFloat());
-  }
-  else if (action == "getSetpoint") {
-    return String(setpoint);
-  }
-  else if (action == "setTemperature") {
-    temperature = parameter.toFloat();
-    updatePort();
-  }
-  else if (action == "getTemperature") {
-    return String(temperature);
-  }
-  else if (action == "update") {
-    updatePort();
-    String state;
-    return updateState(state);
-  }
-  else if (action == "getState") {
-    String state;
-    return updateState(state);
-  }
-  
-  return Device::invoke(action, parameter);
+String Thermostat::updateSetpoint(const String& parameter) {
+  setSetpoint(parameter);
+  updatePort();
+  return String(setpoint);
 }
 
-void Thermostat::setSetpoint(float _setpoint) {
-  setpoint = _setpoint;
+String Thermostat::setSetpoint(const String& parameter) {
+  setpoint = parameter.toFloat();
   Log::debug("Write device state to EEPROM: ", deviceName);
   E2PROM::put(eepromAddr, setpoint);
+  return String(setpoint);
+}
+
+String Thermostat::getSetpoint(const String& parameter) {
+  return String(setpoint);
+}
+
+String Thermostat::setTemperature(const String& parameter) {
+  temperature = parameter.toFloat();
+  updatePort();
+  return String(temperature);
+}
+
+String Thermostat::getTemperature(const String& parameter) {
+  return String(temperature);
+}
+
+String Thermostat::update(const String& parameter) {
+  updatePort();
+  String state;
+  return updateState(state);
+}
+
+String Thermostat::getState(const String& parameter) {
+  String state;
+  return updateState(state);
 }
 
 void Thermostat::updatePort() {
@@ -92,13 +101,13 @@ void Thermostat::updatePort() {
 }
 
 String& Thermostat::updateState(String& state) {
-    state = "{\"setpoint\":";
-    state += setpoint;
-    state += ",\"temperature\":";
-    state += temperature;
-    state += ",\"running\":";
-    state += (port.getState() ? "true" : "false");
-    state += "}";
-    return state;
+  state = "{\"setpoint\":";
+  state += setpoint;
+  state += ",\"temperature\":";
+  state += temperature;
+  state += ",\"running\":";
+  state += (port.getState() ? "true" : "false");
+  state += "}";
+  return state;
 }
 

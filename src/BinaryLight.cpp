@@ -3,6 +3,12 @@
 #include "Log.h"
 
 const char* BinaryLight::deviceClass = "js.hera.dev.BinaryLight";
+Action BinaryLight::metaActions[] = {
+  ACTION("turnON", &BinaryLight::turnON),
+  ACTION("turnOFF", &BinaryLight::turnOFF),
+  ACTION("toggle", &BinaryLight::toggle),
+  ACTION("getState", &BinaryLight::getState)
+};
 
 BinaryLight::BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode, byte eepromAddr):
   Device(deviceClass, deviceName),
@@ -12,6 +18,7 @@ BinaryLight::BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode,
   ledOffColor(0),
   eepromAddr(eepromAddr)
 {
+  ctor();
 }
 
 BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte eepromAddr):
@@ -23,6 +30,7 @@ BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort,
   ledOffColor(0),
   eepromAddr(eepromAddr)
 {
+  ctor();
 }
 
 BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
@@ -34,6 +42,12 @@ BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort,
   eepromAddr(eepromAddr)
 {
   indicatorLED = new Adafruit_NeoPixel(1, indicatorPort, NEO_GRB + NEO_KHZ800);
+  ctor();
+}
+
+void BinaryLight::ctor() {
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void BinaryLight::setup() {
@@ -63,30 +77,7 @@ void BinaryLight::loop()
   }
 }
 
-String BinaryLight::invoke(const String& action, const String& parameter)
-{
-  Log::trace("BinaryLight::invoke");
-
-  if (action == "turnON") {
-    bulb.setState(1);
-    update();
-  }
-  else if (action == "turnOFF") {
-    bulb.setState(0);
-    update();
-  }
-  else if (action == "toggle") {
-    bulb.toggle();
-    update();
-  }
-  else if (action == "getState") {
-    return String(bulb.getState() ? "true" : "false");
-  }
-  
-  return Device::invoke(action, parameter);
-}
-
-void BinaryLight::update() {
+const char* BinaryLight::update() {
   if (eepromAddr != NO_EEPROM) {
     Log::debug("Write device state to EEPROM: ", deviceName);
     E2PROM::write(eepromAddr, bulb.getState());
@@ -97,5 +88,6 @@ void BinaryLight::update() {
     indicatorLED->setPixelColor(0, bulb.getState() == 0 ? ledOffColor : ledOnColor);
     indicatorLED->show();
   }
+  return bulb.toString();
 }
 

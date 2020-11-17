@@ -8,11 +8,16 @@
 #define TARGET_ACTION "toggle"
 
 const char* NetSwitch::deviceClass = "js.hera.dev.NetSwitch";
+Action NetSwitch::metaActions[] = {
+  ACTION("getState", &NetSwitch::getState),
+};
 
 NetSwitch::NetSwitch(const char* deviceName, const char* targetDeviceName, byte port):
   Device(deviceClass, deviceName), targetAction(targetDeviceName, TARGET_ACTION), switchPort(port)
 {
   pressedCounter = 0;
+  actions = metaActions;
+  actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
 
 void NetSwitch::setup() {
@@ -33,13 +38,5 @@ void NetSwitch::loop() {
     ++pressedCounter;
     MessagePublisher::publishDeviceState(deviceName, pressedCounter);
   }
-}
-
-String NetSwitch::invoke(const String& action, const String& parameter) {
-  Log::trace("NetSwitch::invoke");
-  if (action == "getState") {
-    return String(pressedCounter);
-  }
-  return Device::invoke(action, parameter);
 }
 

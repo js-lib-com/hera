@@ -7,12 +7,18 @@
 class Thermostat: public Device {
   public:
     Thermostat(const char* deviceName, byte port, OutMode outMode, byte eepromAddr = 0);
-
     void setup();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String updateSetpoint(const String& parameter);
+    String setSetpoint(const String& parameter);
+    String getSetpoint(const String& parameter);
+    String setTemperature(const String& parameter);
+    String getTemperature(const String& parameter);
+    String update(const String& parameter);
+    String getState(const String& parameter);
 
   private:
-    void setSetpoint(float setpoint);
     void updatePort();
     String& updateState(String& state);
 
@@ -34,6 +40,7 @@ class Thermostat: public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
 
 #endif // __HERA_THERMOSTAT

@@ -11,16 +11,23 @@ class NetSwitch: public Device {
 
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String getState(const String& parameter);
 
   private:
-    DeviceAction targetAction; 
+    DeviceAction targetAction;
     InPort switchPort;
     int pressedCounter;
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
+
+inline String NetSwitch::getState(const String& parameter) {
+  return String(pressedCounter);
+}
 
 #endif
 

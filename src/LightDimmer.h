@@ -10,7 +10,11 @@ class LightDimmer : public Device {
 
     void setup();
     void loop();
-    String invoke(const String& action, const String& parameter = "");
+
+  protected:
+    String updateValue(const String& parameter);
+    String setValue(const String& parameter);
+    String getValue(const String& parameter);
 
   private:
     void update();
@@ -27,7 +31,16 @@ class LightDimmer : public Device {
 
   private:
     static const char* deviceClass;
+    static Action metaActions[];
 };
+
+inline String LightDimmer::getValue(const String& parameter) {
+  return String(value);
+}
+
+inline void LightDimmer::update() {
+  analogWrite(port, 1023 * value / 255);
+}
 
 #endif // __HERA_LIGHT_DIMMER
 
