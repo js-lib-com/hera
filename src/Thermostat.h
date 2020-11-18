@@ -6,7 +6,7 @@
 
 class Thermostat: public Device {
   public:
-    Thermostat(const char* deviceName, byte port, OutMode outMode, byte eepromAddr = 0);
+    Thermostat(const char* deviceName, byte port, OutMode outMode, float hysteresis, byte eepromAddr = 0);
     void setup();
 
   protected:
@@ -34,6 +34,8 @@ class Thermostat: public Device {
 
     // output port current state
     byte state;
+
+    float hysteresis;
 
     // EEPROM address to persist this thermostat state
     const byte eepromAddr;

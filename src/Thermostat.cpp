@@ -15,9 +15,10 @@ Action Thermostat::metaActions[] = {
   ACTION("getState", &Thermostat::getState),
 };
 
-Thermostat::Thermostat(const char* deviceName, byte port, OutMode outMode, byte eepromAddr):
+Thermostat::Thermostat(const char* deviceName, byte port, OutMode outMode, float hysteresis, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
+  hysteresis(hysteresis),
   eepromAddr(eepromAddr)
 {
   actions = metaActions;
@@ -91,7 +92,19 @@ String Thermostat::getState(const String& parameter) {
 
 void Thermostat::updatePort() {
   Log::trace("Thermostat::updatePort()");
-  byte currentState = setpoint > temperature ? 1 : 0;
+
+  float currentSetpoint;
+  switch (state) {
+    case 0:
+      currentSetpoint = setpoint - hysteresis;
+      break;
+
+    case 1:
+      currentSetpoint = setpoint + hysteresis;
+      break;
+  }
+
+  byte currentState = currentSetpoint > temperature ? 1 : 0;
   if (state != currentState) {
     state = currentState;
     Log::debug("port.setState: " + String(currentState));
@@ -103,6 +116,8 @@ void Thermostat::updatePort() {
 String& Thermostat::updateState(String& state) {
   state = "{\"setpoint\":";
   state += setpoint;
+  state += ",\"hysteresis\":";
+  state += hysteresis;
   state += ",\"temperature\":";
   state += temperature;
   state += ",\"running\":";
