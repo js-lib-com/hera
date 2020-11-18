@@ -13,7 +13,7 @@
 #include "HERA.h"
 
 HERA hera;
-const char* HERA_VERSION = "HERA v1.2 build 11/14/20";
+const char* HERA_VERSION = "HERA v1.2 build 11/18/20";
 
 ESP8266WebServer http(SERVER_PORT);
 
