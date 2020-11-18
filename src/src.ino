@@ -3,14 +3,14 @@
 #include "HERA.h"
 #include "DHT.h"
 
-//#define __THERMOSTAT__
+#define __THERMOSTAT__
 //#define __THERMOSTAT_SENSOR__
 //#define __ACTUATOR__
 //#define __ACTION__
 //#define __POWER_METER__
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
-#define __DHT_SENSOR__
+//#define __DHT_SENSOR__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -39,7 +39,7 @@ const char* WIFI_PASSWORD = "mami1964";
 
 Device* devices[] = {
 #ifdef __THERMOSTAT__
-  new Thermostat("thermostat", D2, INVERSE)
+  new Thermostat("thermostat", D2, INVERSE, 0.2, 0)
 #endif
 
 #ifdef __THERMOSTAT_SENSOR__
@@ -66,7 +66,10 @@ Device* devices[] = {
 #endif
 
 #ifdef __DHT_SENSOR__
-  new DHTSensor("dht-sensor", D2)
+  new Actuator("actuator-5", D6, INVERSE),
+  new ColorLED("color-led", D4, D2, D1),
+  new Actuator("actuator-6", D7, INVERSE),
+  new DHTSensor("dht-sensor", D5)
 #endif
 };
 
@@ -76,16 +79,20 @@ DeviceAction action("thermostat-sensor", "getValue");
 int counter;
 #endif
 
-DHT sensor(D2, DHT22);
+#ifdef __DHT_SENSOR__
+//DHT sensor(D2, DHT22);
 int readings;
 int errors;
+#endif
 
 void setup() {
   hera.setup(devices, sizeof(devices) / sizeof(Device*));
 
+#ifdef __DHT_SENSOR__
   readings = 0;
   errors = 0;
-  sensor.begin();
+  //sensor.begin();
+#endif
 }
 
 void loop() {
@@ -97,24 +104,29 @@ void loop() {
   Serial.println(counter++);
 #endif
 
-  //Serial.println(devices[0]->invoke("getValue"));
-
-  const String& humidity = devices[0]->invoke("getHumidity");
-  if (humidity.toFloat() == 0.0) {
-    ++errors;
+#ifdef __DHT_SENSOR__
+  if (millis() < 4000) {
+    return;
   }
 
-  const String& temperature = devices[0]->invoke("getTemperature");
-  if (temperature.toFloat() == 0.0) {
-    ++errors;
-  }
+  /*
+    const String& humidity = devices[0]->invoke("getHumidity");
+    if (humidity.toFloat() == 0.0) {
+      ++errors;
+    }
+    const String& temperature = devices[0]->invoke("getTemperature");
+    if (temperature.toFloat() == 0.0) {
+      ++errors;
+    }
 
-  Serial.print(++readings);
-  Serial.print(" : ");
-  Serial.print(errors);
-  Serial.print(" : ");
-  Serial.print(humidity);
-  Serial.print(" : ");
-  Serial.println(temperature);
+    Serial.print(++readings);
+    Serial.print(" : ");
+    Serial.print(errors);
+    Serial.print(" : ");
+    Serial.print(humidity);
+    Serial.print(" : ");
+    Serial.println(temperature);
+  */
+#endif
 }
 
