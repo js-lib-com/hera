@@ -3,7 +3,7 @@
 #include "HERA.h"
 #include "DHT.h"
 
-#define __THERMOSTAT__
+//#define __THERMOSTAT__
 //#define __THERMOSTAT_SENSOR__
 //#define __ACTUATOR__
 //#define __ACTION__
@@ -11,6 +11,7 @@
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
 //#define __DHT_SENSOR__
+#define __LIGHT_DIMMER__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -32,6 +33,9 @@ const char* HOST_NAME = "color-led";
 #endif
 #ifdef __DHT_SENSOR__
 const char* HOST_NAME = "dht-sensor";
+#endif
+#ifdef __LIGHT_DIMMER__
+const char* HOST_NAME = "light-dimmer";
 #endif
 
 const char* WIFI_SSID = "DIR-825-A936";
@@ -70,6 +74,10 @@ Device* devices[] = {
   new ColorLED("color-led", D4, D2, D1),
   new Actuator("actuator-6", D7, INVERSE),
   new DHTSensor("dht-sensor", D5)
+#endif
+
+#ifdef __LIGHT_DIMMER__
+  new LightDimmer("light-dimmer", 4)
 #endif
 };
 

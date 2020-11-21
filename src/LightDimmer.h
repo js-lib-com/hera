@@ -9,7 +9,6 @@ class LightDimmer : public Device {
     LightDimmer(const char* deviceName, byte port, byte eepromAddr = NO_EEPROM);
 
     void setup();
-    void loop();
 
   protected:
     String updateValue(const String& parameter);
