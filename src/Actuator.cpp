@@ -6,13 +6,15 @@ Action Actuator::metaActions[] = {
   ACTION("turnON", &Actuator::turnON),
   ACTION("turnOFF", &Actuator::turnOFF),
   ACTION("toggle", &Actuator::toggle),
+  ACTION("pulse", &Actuator::pulse),
   ACTION("setState", &Actuator::setState),
   ACTION("getState", &Actuator::getState)
 };
 
-Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr):
+Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, int pulseLength, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
+  pulseLength(pulseLength),
   indicatorLED(0),
   ledOnColor(0),
   ledOffColor(0),
@@ -24,6 +26,7 @@ Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte eepr
 Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
+  pulseLength(0),
   ledOnColor(ledOnColor),
   ledOffColor(ledOffColor),
   eepromAddr(eepromAddr)
@@ -33,6 +36,7 @@ Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte indi
 }
 
 void Actuator::ctor() {
+  pulseStart = 0;
   actions = metaActions;
   actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
@@ -53,6 +57,19 @@ void Actuator::setup() {
   indicatorLED->begin();
   indicatorLED->setPixelColor(0, port.getState() == 0 ? ledOffColor : ledOnColor);
   indicatorLED->show();
+}
+
+void Actuator::loop() {
+  if (pulseStart > 0 && millis() - pulseStart >= pulseLength) {
+    pulseStart = 0;
+    port.setState(0);
+  }
+}
+
+String Actuator::pulse(const String& parameter) {
+  port.setState(1);
+  pulseStart = millis();
+  return "";
 }
 
 const char* Actuator::update() {

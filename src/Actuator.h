@@ -9,16 +9,18 @@
 
 class Actuator: public Device {
   public:
-    Actuator(const char* deviceName, byte port, OutMode outMode, byte eepromAddr = NO_EEPROM);
+    Actuator(const char* deviceName, byte port, OutMode outMode, int pulseLength = 4000, byte eepromAddr = NO_EEPROM);
     Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
     void ctor();
     void setup();
+    void loop();
 
   protected:
     String turnON(const String& parameter);
     String turnOFF(const String& parameter);
     String toggle(const String& parameter);
+    String pulse(const String& parameter);
     String setState(const String& parameter);
     String getState(const String& parameter);
 
@@ -29,6 +31,11 @@ class Actuator: public Device {
     // output port, driver for actuator
     OutPort port;
 
+    // pulse length, in milliseconds; relevant only for pulse action
+    const int pulseLength;
+
+    unsigned long pulseStart;
+    
     // optional adressable LED for actuator state local indication; used only if indicator port is set on constructor
     Adafruit_NeoPixel* indicatorLED;
 
