@@ -5,14 +5,14 @@
 
 //#define __THERMOSTAT__
 //#define __THERMOSTAT_SENSOR__
-#define __ACTUATOR__
+//#define __ACTUATOR__
 //#define __ACTION__
 //#define __POWER_METER__
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
 //#define __DHT_SENSOR__
 //#define __LIGHT_DIMMER__
-//#define __RADIO_SWITCH__
+#define __RADIO_SWITCH__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
