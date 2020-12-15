@@ -5,6 +5,7 @@
 #include "MessagePublisher.h"
 #include "Log.h"
 
+#define TMP102_RESOLUTION 0.0625
 #define INVALID_TEMPERATURE -273.15
 
 const char* TemperatureSensor::deviceClass = "js.hera.dev.TemperatureSensor";
@@ -16,7 +17,6 @@ Action TemperatureSensor::metaActions[] = {
 TemperatureSensor::TemperatureSensor(const char* deviceName, byte sensorAddress, byte period, float threshold, float offset):
   TemperatureSensor(deviceClass, deviceName, sensorAddress, period, threshold, offset)
 {
-  ctor();
 }
 
 TemperatureSensor::TemperatureSensor(const char* deviceClass, const char* deviceName, byte sensorAddress, byte period, float threshold, float offset):
@@ -27,11 +27,7 @@ TemperatureSensor::TemperatureSensor(const char* deviceClass, const char* device
   offset(offset)
 {
   compensatedTemperature = 0;
-  timestamp = 0;
-  ctor();
-}
-
-void TemperatureSensor::ctor() {
+  lastReadMillis = 0;
   actions = metaActions;
   actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
 }
@@ -43,12 +39,12 @@ void TemperatureSensor::setup() {
 
 void TemperatureSensor::loop() {
   // do not read temperature sensor at every loop iteration to filter out quick changes
-  if (millis() - timestamp < period) {
+  if (millis() - lastReadMillis < period) {
     return;
   }
 
   float temperature = readTemperature();
-  timestamp = millis();
+  lastReadMillis = millis();
   if (temperature == INVALID_TEMPERATURE) {
     return;
   }
@@ -72,7 +68,7 @@ float TemperatureSensor::readTemperature() {
 
   byte MSB = Wire.read();
   byte LSB = Wire.read();
-  float temperature = (((MSB << 8) | LSB) >> 4) * 0.0625;
+  float temperature = (((MSB << 8) | LSB) >> 4) * TMP102_RESOLUTION;
   Log::debug("temperature: " + String(temperature));
   temperature += offset;
   Log::debug("compensated temperature: " + String(temperature));

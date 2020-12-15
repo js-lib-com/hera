@@ -8,7 +8,6 @@ class TemperatureSensor: public Device {
   public:
     TemperatureSensor(const char* deviceName, byte sensorAddress, byte period = 1, float threshold = 0, float offset = 0);
 
-    void ctor();
     void setup();
     virtual void loop();
 
@@ -26,17 +25,17 @@ class TemperatureSensor: public Device {
     // I2C address for TMP102 device
     const byte sensorAddress;
 
-    // temperature sensor reading period, in seconds
-    const long period;
+    // temperature sensor reading period, in milliseconds
+    const unsigned long period;
 
+    // millis timestamp of the last successful sensor read
+    unsigned long lastReadMillis;
+    
     // temperature thresold to trigger compensated value compute and publish
     const float threshold;
 
     // signed offset added to measured value for ambient compensation
     const float offset;
-
-    // hysteresis timeout timestamp
-    long timestamp;
 
     // temperature value compensated with configured offset
     float compensatedTemperature;
