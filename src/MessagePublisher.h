@@ -7,8 +7,9 @@ class MessagePublisher {
   public:
     static void init();
     static void subscribe(const String& messageBrokerURL);
-    
+
     static void publishDeviceState(const char* deviceName, float value);
+    static void publishDeviceState(const char* deviceName, const char* valueName, float value);
     static void publishLogRecord(const char* level, const char* message);
 
   private:
@@ -18,6 +19,10 @@ class MessagePublisher {
     static bool serialEnabled;
     static String messageBrokerURL;
 };
+
+inline void MessagePublisher::publishDeviceState(const char* deviceName, float value) {
+  MessagePublisher::publishDeviceState(deviceName, "value", value);
+}
 
 #endif
 

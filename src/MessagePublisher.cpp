@@ -24,7 +24,7 @@ void MessagePublisher::subscribe(const String& _messageBrokerURL) {
   }
 }
 
-void MessagePublisher::publishDeviceState(const char* deviceName, float value) {
+void MessagePublisher::publishDeviceState(const char* deviceName, const char* valueName, float value) {
   if (!messageBrokerURL.length()) {
     return;
   }
@@ -33,7 +33,9 @@ void MessagePublisher::publishDeviceState(const char* deviceName, float value) {
     Serial.println("Send device state event");
     Serial.print("- device name: ");
     Serial.println(deviceName);
-    Serial.print("- value: ");
+    Serial.print("- ");
+    Serial.print(valueName);
+    Serial.print(": ");
     Serial.println(value);
   }
 
