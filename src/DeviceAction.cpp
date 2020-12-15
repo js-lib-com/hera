@@ -26,6 +26,7 @@ bool DeviceAction::invoke() {
 bool DeviceAction::_invoke() {
   Log::trace("DeviceAction::_invoke");
 
+  statusCode = 0;
   if (!address) {
     Log::debug("Query service: ", deviceName);
     int n = MDNS.queryService(deviceName, "tcp");
