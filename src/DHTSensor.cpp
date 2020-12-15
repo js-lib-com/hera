@@ -1,6 +1,9 @@
 #include "DHTSensor.h"
 #include "Log.h"
 
+#define INVALID_HUMIDITY 0.0
+#define INVALID_TEMPERATURE -273.15
+
 const char* DHTSensor::deviceClass = "js.hera.dev.DHTSensor";
 Action DHTSensor::metaActions[] = {
   ACTION("getHumidity", &DHTSensor::getHumidity),
@@ -8,12 +11,19 @@ Action DHTSensor::metaActions[] = {
   ACTION("getValue", &DHTSensor::getValue),
 };
 
-DHTSensor::DHTSensor(const char* deviceName, byte port, byte type):
+DHTSensor::DHTSensor(const char* deviceName, byte port, byte type, int period, float humidityThreshold, float temperatureThreshold):
   Device(deviceClass, deviceName),
-  sensor(port, type)
+  sensor(port, type),
+  period(1000 * period),
+  humidityThreshold(humidityThreshold),
+  temperatureThreshold(temperatureThreshold)
 {
   actions = metaActions;
   actionsCount = sizeof(metaActions) / sizeof(metaActions[0]);
+  timestamp = 0;
+  humidity = INVALID_HUMIDITY;
+  temperature = INVALID_TEMPERATURE;
+
 }
 
 void DHTSensor::setup() {
@@ -21,20 +31,23 @@ void DHTSensor::setup() {
   sensor.begin();
 }
 
-String DHTSensor::getHumidity(const String& parameter) {
-  float humidity = sensor.readHumidity();
-  if (isnan(humidity)) {
-    humidity = 0;
+void DHTSensor::loop() {
+  if (millis() - timestamp < period) {
+    return;
   }
-  return String(humidity);
-}
+  timestamp = millis();
 
-String DHTSensor::getTemperature(const String& parameter) {
-  float temperature = sensor.readTemperature();
-  if (isnan(temperature)) {
-    temperature = 0;
+  float sensorHumidity = readHumidity();
+  if (fabs(sensorHumidity - humidity) >= humidityThreshold) {
+    humidity = sensorHumidity;
+    MessagePublisher::publishDeviceState(deviceName, "humidity", humidity);
   }
-  return String(temperature);
+
+  float sensorTemperature = readTemperature();
+  if (fabs(sensorTemperature - temperature) >= temperatureThreshold) {
+    temperature = sensorTemperature;
+    //MessagePublisher::publishDeviceState(deviceName, "temperature", temperature);
+  }
 }
 
 String DHTSensor::getValue(const String& parameter) {
