@@ -4,12 +4,12 @@
 
 const char* LightSensor::deviceClass = "js.hera.dev.LightSensor";
 
-LightSensor::LightSensor(const char* deviceName, byte _analogPort, int _period, int _threshold):
+LightSensor::LightSensor(const char* deviceName, byte analogPort, int period, int threshold):
   Device(deviceClass, deviceName),
-  analogPort(_analogPort),
+  analogPort(analogPort),
   timestamp(0),
-  period(_period),
-  threshold(_threshold),
+  period(period),
+  threshold(threshold),
   currentValue(0)
 {
 }
