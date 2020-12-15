@@ -54,8 +54,7 @@ void Thermostat::setup() {
 
 String Thermostat::updateSetpoint(const String& parameter) {
   setSetpoint(parameter);
-  updatePort();
-  return String(setpoint);
+  return update(parameter);
 }
 
 String Thermostat::setSetpoint(const String& parameter) {
