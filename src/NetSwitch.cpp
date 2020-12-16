@@ -36,7 +36,7 @@ void NetSwitch::loop() {
     Log::debug("Net switch pressed.");
     targetAction.exec();
     ++pressedCounter;
-    MessagePublisher::publishDeviceState(deviceName, pressedCounter);
+    // MessagePublisher::publishDeviceState(deviceName, pressedCounter);
   }
 }
 
