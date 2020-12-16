@@ -46,7 +46,7 @@ const char* WIFI_PASSWORD = "mami1964";
 
 Device* devices[] = {
 #ifdef __THERMOSTAT__
-  new Thermostat("thermostat", D2, INVERSE, 0.1, 0)
+  new Thermostat("thermostat", D2, INVERSE, 0.0, 0)
 #endif
 
 #ifdef __THERMOSTAT_SENSOR__
@@ -73,10 +73,10 @@ Device* devices[] = {
 #endif
 
 #ifdef __DHT_SENSOR__
-  new Actuator("actuator-5", D6, INVERSE),
-  new ColorLED("color-led", D4, D2, D1),
+  new Actuator("actuator-5", D4, INVERSE),
+  new ColorLED("color-led", D3, D2, D1),
   new Actuator("actuator-6", D7, INVERSE),
-  new DHTSensor("dht-sensor", D5)
+  new DHTSensor("dht-sensor", D5, DHT22, 30, 0.5, 0.2)
 #endif
 
 #ifdef __LIGHT_DIMMER__
