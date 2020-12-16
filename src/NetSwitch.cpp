@@ -26,17 +26,17 @@ void NetSwitch::setup() {
 }
 
 void NetSwitch::loop() {
-  if (targetAction.error()) {
-    Log::error("Target action error. Retry sending.");
-    targetAction.exec();
-    return;
-  }
+//  if (targetAction.error()) {
+//    Log::error("Target action error. Retry sending.");
+//    targetAction.exec();
+//    return;
+//  }
 
   if (switchPort.pressed()) {
     Log::debug("Net switch pressed.");
     targetAction.exec();
     ++pressedCounter;
-    // MessagePublisher::publishDeviceState(deviceName, pressedCounter);
+    MessagePublisher::publishDeviceState(deviceName, pressedCounter);
   }
 }
 
