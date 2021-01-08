@@ -9,6 +9,12 @@ const char* ColorLED::deviceClass = "js.hera.dev.ColorLED";
 Action ColorLED::metaActions[] = {
   ACTION("setColor", &ColorLED::setColor),
   ACTION("getColor", &ColorLED::getColor),
+  ACTION("setBrightness", &ColorLED::setBrightness),
+  ACTION("getBrightness", &ColorLED::getBrightness),
+  ACTION("turnON", &ColorLED::turnON),
+  ACTION("turnOFF", &ColorLED::turnOFF),
+  ACTION("setState", &ColorLED::setState),
+  ACTION("getState", &ColorLED::getState)
 };
 
 ColorLED::ColorLED(const char* deviceName, byte redPort, byte greenPort, byte bluePort, byte eepromAddr):
@@ -19,6 +25,8 @@ ColorLED::ColorLED(const char* deviceName, byte redPort, byte greenPort, byte bl
   red(0),
   green(0),
   blue(0),
+  brightness(1.0),
+  active(true),
   eepromAddr(eepromAddr)
 {
   actions = metaActions;
@@ -58,9 +66,21 @@ String ColorLED::setColor(const String& parameter) {
   return getColor(parameter);
 }
 
+String ColorLED::setBrightness(const String& parameter) {
+  brightness = parameter.toFloat();
+  update();
+  return getBrightness(parameter);
+}
+
+String ColorLED::setState(const String& parameter) {
+  active = parameter.toInt() == 1;
+  update();
+  return getState(parameter);
+}
+
 void ColorLED::update() {
-  analogWrite(redPort, 1023 * red / 255);
-  analogWrite(greenPort, 1023 * green / 255);
-  analogWrite(bluePort, 1023 * blue / 255);
+  analogWrite(redPort, pwm(red));
+  analogWrite(greenPort, pwm(green));
+  analogWrite(bluePort, pwm(blue));
 }
 
