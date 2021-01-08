@@ -7,6 +7,7 @@ Action BinaryLight::metaActions[] = {
   ACTION("turnON", &BinaryLight::turnON),
   ACTION("turnOFF", &BinaryLight::turnOFF),
   ACTION("toggle", &BinaryLight::toggle),
+  ACTION("setState", &BinaryLight::setState),
   ACTION("getState", &BinaryLight::getState)
 };
 

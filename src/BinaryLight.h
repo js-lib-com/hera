@@ -22,6 +22,7 @@ class BinaryLight : public Device {
     String turnON(const String& parameter);
     String turnOFF(const String& parameter);
     String toggle(const String& parameter);
+    String setState(const String& parameter);
     String getState(const String& parameter);
 
   private:
@@ -63,6 +64,11 @@ inline String BinaryLight::turnOFF(const String& parameter) {
 
 inline String BinaryLight::toggle(const String& parameter) {
   bulb.toggle();
+  return update();
+}
+
+inline String BinaryLight::setState(const String& parameter) {
+  bulb.setState(parameter.toInt());
   return update();
 }
 
