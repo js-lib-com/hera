@@ -18,6 +18,7 @@
 #include "ThermostatSensor.h"
 #include "PowerMeter.h"
 #include "NetSwitch.h"
+#include "RollerBlinds.h"
 
 extern const char* HOST_NAME;
 extern const char* WIFI_SSID;

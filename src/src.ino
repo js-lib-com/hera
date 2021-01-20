@@ -12,6 +12,7 @@
 #define __DHT_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
+//#define __ROLLER_BLINDS__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -40,6 +41,9 @@ const char* HOST_NAME = "light-dimmer";
 #ifdef __RADIO_SWITCH__
 const char* HOST_NAME = "radio-switch";
 #endif
+#ifdef __ROLLER_BLINDS__
+const char* HOST_NAME = "roller-blinds";
+#endif
 
 const char* WIFI_SSID = "DIR-825-A936";
 const char* WIFI_PASSWORD = "mami1964";
@@ -54,8 +58,7 @@ Device* devices[] = {
 #endif
 
 #ifdef __ACTUATOR__
-  new Actuator("actuator-1", D1, DIRECT),
-  new Actuator("actuator-2", D2, DIRECT),
+  new BinaryLight("binary-light-1", D1, D2, DIRECT),
   new Actuator("actuator-3", D3, DIRECT),
   new Actuator("actuator-4", D4, INVERSE)
 #endif
@@ -85,6 +88,10 @@ Device* devices[] = {
 
 #ifdef __RADIO_SWITCH__
   new RadioSwitch("radio-switch", 2, 0L)
+#endif
+
+#ifdef __ROLLER_BLINDS__
+  new RollerBlinds("roller-blinds", D5, D6, D7, D8)
 #endif
 };
 
