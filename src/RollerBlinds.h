@@ -14,6 +14,7 @@ class RollerBlinds: public Device {
     String open(const String& parameter);
     String close(const String& parameter);
     String position(const String& parameter);
+    String state(const String& parameter);
 
     String move(const String& parameter);
     String stop(const String& parameter);
@@ -29,22 +30,25 @@ class RollerBlinds: public Device {
     /// The number of steps to roll down to maximum position.
     long downPosition;
 
+    /// Controlled moving pending. Set to true when open is invoked and reseted to false when target is reached.
+    bool movingPending;
+
   private:
     static const char* deviceClass;
     static Action metaActions[];
 };
 
-inline String RollerBlinds::open(const String& parameter) {
-  float percent = parameter.toFloat();
-  stepper.moveTo((1.0F - percent) * downPosition);
-}
-
 inline String RollerBlinds::close(const String& parameter) {
-  stepper.moveTo(downPosition);
+  open("0.0");
+  return String(stepper.currentPosition());
 }
 
 inline String RollerBlinds::position(const String& parameter) {
   return String(stepper.currentPosition());
+}
+
+inline String RollerBlinds::state(const String& parameter) {
+  return downPosition ? String(abs((double)stepper.currentPosition() / (double)downPosition)) : "1.0";
 }
 
 inline String RollerBlinds::move(const String& parameter) {
