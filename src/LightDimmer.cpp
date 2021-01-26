@@ -6,12 +6,17 @@ Action LightDimmer::metaActions[] = {
   ACTION("updateValue", &LightDimmer::updateValue),
   ACTION("setValue", &LightDimmer::setValue),
   ACTION("getValue", &LightDimmer::getValue),
+  ACTION("turnON", &LightDimmer::turnON),
+  ACTION("turnOFF", &LightDimmer::turnOFF),
+  ACTION("setState", &LightDimmer::setState),
+  ACTION("getState", &LightDimmer::getState)
 };
 
 LightDimmer::LightDimmer(const char* deviceName, byte port, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port),
   value(0),
+  active(false),
   eepromAddr(eepromAddr)
 {
   actions = metaActions;
@@ -29,7 +34,7 @@ void LightDimmer::setup() {
 String LightDimmer::updateValue(const String& parameter) {
   value = parameter.toInt();
   update();
-  return getValue(parameter);
+  return state();
 }
 
 String LightDimmer::setValue(const String& parameter) {
@@ -38,6 +43,17 @@ String LightDimmer::setValue(const String& parameter) {
     E2PROM::write(eepromAddr, value);
   }
   update();
-  return getValue(parameter);
+  return state();
+}
+
+String LightDimmer::setState(const String& parameter) {
+  active = parameter.toInt() == 1;
+  update();
+  return state();
+}
+
+void LightDimmer::update() {
+  int pwd = active ? 1023 * value / 255 : 0;
+  analogWrite(port, pwd);
 }
 

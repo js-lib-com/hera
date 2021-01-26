@@ -15,8 +15,16 @@ class LightDimmer : public Device {
     String setValue(const String& parameter);
     String getValue(const String& parameter);
 
+    String turnON(const String& parameter);
+    String turnOFF(const String& parameter);
+    String setState(const String& parameter);
+    String getState(const String& parameter);
+
   private:
     void update();
+
+    // Return current device state format JSON
+    String state();
 
   private:
     // pwm port
@@ -24,6 +32,9 @@ class LightDimmer : public Device {
 
     // pwm current value, initialized from EEPROM at setup
     byte value;
+
+    // on / off state, true if active
+    boolean active;
 
     // EEPROM address to persist this binary lights state
     byte eepromAddr;
@@ -37,8 +48,25 @@ inline String LightDimmer::getValue(const String& parameter) {
   return String(value);
 }
 
-inline void LightDimmer::update() {
-  analogWrite(port, 1023 * value / 255);
+inline String LightDimmer::turnON(const String& parameter) {
+  return setState("1");
+}
+
+inline String LightDimmer::turnOFF(const String& parameter) {
+  return setState("0");
+}
+
+inline String LightDimmer::getState(const String& parameter) {
+  return state();
+}
+
+inline String LightDimmer::state() {
+  String state = "{\"value\":";
+  state += value;
+  state += ",\"active\":";
+  state += (active ? "true" : "false");
+  state += "}";
+  return state;
 }
 
 #endif // __HERA_LIGHT_DIMMER

@@ -9,10 +9,10 @@
 //#define __POWER_METER__
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
-//#define __DHT_SENSOR__
+#define __DHT_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
-#define __ROLLER_BLINDS__
+//#define __ROLLER_BLINDS__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -78,7 +78,7 @@ Device* devices[] = {
 #ifdef __DHT_SENSOR__
   new Actuator("actuator-5", D4, INVERSE),
   new ColorLED("color-led", D3, D2, D1),
-  new Actuator("actuator-6", D7, INVERSE),
+  new LightDimmer("light-dimmer", D7),
   new DHTSensor("dht-sensor", D5, DHT22, 30, 0.5, 0.2)
 #endif
 
