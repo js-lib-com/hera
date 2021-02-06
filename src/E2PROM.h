@@ -24,6 +24,21 @@ class E2PROM {
       EEPROM.end();
     }
 
+    static void get(byte addr, long& reference) {
+      EEPROM.begin(EEPROM_BUFFER_SIZE);
+      EEPROM.get(EEPROM_ADDR_OFFSET + addr, reference);
+      if (isnan(reference)) {
+        reference = 0;
+      }
+      EEPROM.end();
+    }
+
+    static void put(byte addr, long value) {
+      EEPROM.begin(EEPROM_BUFFER_SIZE);
+      EEPROM.put(EEPROM_ADDR_OFFSET + addr, value);
+      EEPROM.end();
+    }
+
     static void get(byte addr, float& reference) {
       EEPROM.begin(EEPROM_BUFFER_SIZE);
       EEPROM.get(EEPROM_ADDR_OFFSET + addr, reference);

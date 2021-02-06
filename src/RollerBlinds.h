@@ -3,10 +3,11 @@
 
 #include <AccelStepper.h>
 #include "Device.h"
+#include "E2PROM.h"
 
 class RollerBlinds: public Device {
   public:
-    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4);
+    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, byte eepromAddr = 0);
     void setup();
     void loop();
 
@@ -21,8 +22,12 @@ class RollerBlinds: public Device {
     String updateUpPosition(const String& parameter);
     String updateDownPosition(const String& parameter);
 
+    String dump(const String& parameter);
+    
   private:
     AccelStepper stepper;
+
+    bool calibrationRequired;
 
     /// Manual moving steps. As long this value is non zero stepper keep moving.
     int movingSteps;
@@ -30,8 +35,10 @@ class RollerBlinds: public Device {
     /// The number of steps to roll down to maximum position.
     long downPosition;
 
-    /// Controlled moving pending. Set to true when open is invoked and reseted to false when target is reached.
-    bool movingPending;
+    /// Open moving pending. Set to true when open is invoked and reseted to false when target is reached.
+    byte openPending;
+
+    byte eepromAddr;
 
   private:
     static const char* deviceClass;
@@ -63,11 +70,6 @@ inline String RollerBlinds::stop(const String& parameter) {
 
 inline String RollerBlinds::updateUpPosition(const String& parameter) {
   stepper.setCurrentPosition(0);
-  return String(stepper.currentPosition());
-}
-
-inline String RollerBlinds::updateDownPosition(const String& parameter) {
-  downPosition = stepper.currentPosition();
   return String(stepper.currentPosition());
 }
 
