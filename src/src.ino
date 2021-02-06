@@ -9,10 +9,10 @@
 //#define __POWER_METER__
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
-//#define __DHT_SENSOR__
+#define __DHT_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
-#define __ROLLER_BLINDS__
+//#define __ROLLER_BLINDS__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";

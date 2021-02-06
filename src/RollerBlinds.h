@@ -23,7 +23,7 @@ class RollerBlinds: public Device {
     String updateDownPosition(const String& parameter);
 
     String dump(const String& parameter);
-    
+
   private:
     AccelStepper stepper;
 
@@ -34,6 +34,8 @@ class RollerBlinds: public Device {
 
     /// The number of steps to roll down to maximum position.
     long downPosition;
+
+    long lastKnownPosition;
 
     /// Open moving pending. Set to true when open is invoked and reseted to false when target is reached.
     byte openPending;

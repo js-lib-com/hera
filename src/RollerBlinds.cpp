@@ -2,7 +2,8 @@
 #include "Log.h"
 
 #define ADDR_DOWN_POSITION 0
-#define ADDR_OPEN_PENDING ADDR_DOWN_POSITION + sizeof(long)
+#define ADDR_LAST_KNOWN_POSITION ADDR_DOWN_POSITION + sizeof(long)
+#define ADDR_OPEN_PENDING ADDR_LAST_KNOWN_POSITION + sizeof(long)
 
 const char* RollerBlinds::deviceClass = "js.hera.dev.RollerBlinds";
 Action RollerBlinds::metaActions[] = {
@@ -20,6 +21,8 @@ Action RollerBlinds::metaActions[] = {
 RollerBlinds::RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, byte eepromAddr):
   Device(deviceClass, deviceName),
   stepper(4, pin1, pin2, pin3, pin4),
+  downPosition(0),
+  lastKnownPosition(0),
   calibrationRequired(false),
   movingSteps(0),
   openPending(0),
@@ -36,6 +39,10 @@ void RollerBlinds::setup() {
   E2PROM::get(eepromAddr + ADDR_DOWN_POSITION, downPosition);
   Log::debug("Down position: ", downPosition);
 
+  Log::debug("Reading last know position from EEPROM address: ", eepromAddr + ADDR_LAST_KNOWN_POSITION);
+  E2PROM::get(eepromAddr + ADDR_LAST_KNOWN_POSITION, lastKnownPosition);
+  Log::debug("Last known position: ", lastKnownPosition);
+
   Log::debug("Reading open pending from EEPROM address: ", eepromAddr + ADDR_OPEN_PENDING);
   openPending = E2PROM::read(eepromAddr + ADDR_OPEN_PENDING);
   Log::debug("Open pending: ", openPending);
@@ -43,11 +50,15 @@ void RollerBlinds::setup() {
   if (openPending) {
     Log::debug("Open pending. Force calibration.");
     downPosition = 0;
+    lastKnownPosition = 0;
     openPending = 0;
     calibrationRequired = true;
   }
+
   stepper.setMaxSpeed(500);
   stepper.setAcceleration(50);
+  Log::debug("Set stepper motor current position to ", lastKnownPosition);
+  stepper.setCurrentPosition(lastKnownPosition);
 }
 
 void RollerBlinds::loop() {
@@ -63,9 +74,14 @@ void RollerBlinds::loop() {
   stepper.run();
   if (stepper.distanceToGo() == 0) {
     openPending = 0;
+    stepper.disableOutputs();
+
     E2PROM::write(eepromAddr + ADDR_OPEN_PENDING, openPending);
     Log::debug("Reset open pending on EEPROM.");
-    stepper.disableOutputs();
+
+    lastKnownPosition = stepper.currentPosition();
+    E2PROM::put(eepromAddr + ADDR_LAST_KNOWN_POSITION, lastKnownPosition);
+    Log::debug("Save last known position on EEPROM: ", lastKnownPosition);
   }
 }
 
@@ -103,6 +119,8 @@ String RollerBlinds::dump(const String& parameter) {
   state += movingSteps;
   state += ",\"downPosition\":";
   state += downPosition;
+  state += ",\"lastKnownPosition\":";
+  state += lastKnownPosition;
   state += ",\"openPending\":";
   state += openPending;
   state += ",\"eepromAddr\":";
