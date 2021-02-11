@@ -13,6 +13,7 @@ Action RollerBlinds::metaActions[] = {
   ACTION("state", &RollerBlinds::state),
   ACTION("move", &RollerBlinds::move),
   ACTION("stop", &RollerBlinds::stop),
+  ACTION("inverse", &RollerBlinds::inverse),
   ACTION("updateUpPosition", &RollerBlinds::updateUpPosition),
   ACTION("updateDownPosition", &RollerBlinds::updateDownPosition),
   ACTION("dump", &RollerBlinds::dump)
