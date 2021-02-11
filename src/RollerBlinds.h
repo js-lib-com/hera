@@ -5,9 +5,13 @@
 #include "Device.h"
 #include "E2PROM.h"
 
+enum MotorPosition {
+  LEFT, RIGHT
+};
+
 class RollerBlinds: public Device {
   public:
-    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, byte eepromAddr = 0);
+    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, MotorPosition motorPosition, byte eepromAddr = 0);
     void setup();
     void loop();
 
@@ -26,6 +30,9 @@ class RollerBlinds: public Device {
 
   private:
     AccelStepper stepper;
+
+    /// 1: clockwise, -1: anti-clockwise
+    byte rotationSens;
 
     bool calibrationRequired;
 
