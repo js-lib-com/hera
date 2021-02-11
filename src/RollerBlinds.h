@@ -5,9 +5,13 @@
 #include "Device.h"
 #include "E2PROM.h"
 
+enum MotorPosition {
+  LEFT, RIGHT
+};
+
 class RollerBlinds: public Device {
   public:
-    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, byte eepromAddr = 0);
+    RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, MotorPosition motorPosition, byte eepromAddr = 0);
     void setup();
     void loop();
 
@@ -19,7 +23,6 @@ class RollerBlinds: public Device {
 
     String move(const String& parameter);
     String stop(const String& parameter);
-    String inverse(const String& parameter);
     String updateUpPosition(const String& parameter);
     String updateDownPosition(const String& parameter);
 
@@ -28,10 +31,10 @@ class RollerBlinds: public Device {
   private:
     AccelStepper stepper;
 
-    /// 1: clockwise, -1: anti-clockwise
-    byte rotationSens;
-
     bool calibrationRequired;
+
+    /// 1: clockwise, -1: anti-clockwise
+    int rotationSens;
 
     /// Manual moving steps. As long this value is non zero stepper keep moving.
     int movingSteps;
@@ -71,11 +74,6 @@ inline String RollerBlinds::move(const String& parameter) {
 
 inline String RollerBlinds::stop(const String& parameter) {
   movingSteps = 0;
-  return String(stepper.currentPosition());
-}
-
-inline String RollerBlinds::inverse(const String& parameter) {
-  rotationSens = parameter.toInt();
   return String(stepper.currentPosition());
 }
 

@@ -91,7 +91,7 @@ Device* devices[] = {
 #endif
 
 #ifdef __ROLLER_BLINDS__
-  new RollerBlinds("roller-blinds", D5, D6, D7, D8)
+  new RollerBlinds("roller-blinds", D5, D6, D7, D8, LEFT)
 #endif
 };
 

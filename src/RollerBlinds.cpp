@@ -13,13 +13,12 @@ Action RollerBlinds::metaActions[] = {
   ACTION("state", &RollerBlinds::state),
   ACTION("move", &RollerBlinds::move),
   ACTION("stop", &RollerBlinds::stop),
-  ACTION("inverse", &RollerBlinds::inverse),
   ACTION("updateUpPosition", &RollerBlinds::updateUpPosition),
   ACTION("updateDownPosition", &RollerBlinds::updateDownPosition),
   ACTION("dump", &RollerBlinds::dump)
 };
 
-RollerBlinds::RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, byte eepromAddr):
+RollerBlinds::RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pin3, byte pin4, MotorPosition motorPosition, byte eepromAddr):
   Device(deviceClass, deviceName),
   stepper(4, pin1, pin2, pin3, pin4),
   downPosition(0),
@@ -27,7 +26,7 @@ RollerBlinds::RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pi
   calibrationRequired(false),
   movingSteps(0),
   openPending(0),
-  rotationSens(1),
+  rotationSens(motorPosition == LEFT ? -1 : 1),
   eepromAddr(eepromAddr)
 {
   actions = metaActions;
