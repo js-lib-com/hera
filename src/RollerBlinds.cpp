@@ -99,7 +99,7 @@ String RollerBlinds::open(const String& parameter) {
   stepper.enableOutputs();
 
   float percent = parameter.toFloat();
-  stepper.moveTo(rotationSens * (1.0F - percent) * downPosition);
+  stepper.moveTo((1.0F - percent) * downPosition);
 
   return state(parameter);
 }
