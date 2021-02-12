@@ -26,7 +26,7 @@ RollerBlinds::RollerBlinds(const char* deviceName, byte pin1, byte pin2, byte pi
   calibrationRequired(false),
   movingSteps(0),
   openPending(0),
-  rotationSens(motorPosition == LEFT ? -1 : 1),
+  rotationSens(motorPosition == LEFT ? 1 : -1),
   eepromAddr(eepromAddr)
 {
   actions = metaActions;
