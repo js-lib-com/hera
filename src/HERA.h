@@ -12,6 +12,7 @@
 #include "RadioSwitch.h"
 #include "DHTSensor.h"
 #include "ColorLED.h"
+#include "NeoPixel.h"
 #include "LightSensor.h"
 #include "TemperatureSensor.h"
 #include "Thermostat.h"
