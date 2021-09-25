@@ -12,7 +12,8 @@
 //#define __DHT_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
-#define __ROLLER_BLINDS__
+//#define __ROLLER_BLINDS__
+#define __NEO_PIXEL__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -43,6 +44,9 @@ const char* HOST_NAME = "radio-switch";
 #endif
 #ifdef __ROLLER_BLINDS__
 const char* HOST_NAME = "roller-blinds";
+#endif
+#ifdef __NEO_PIXEL__
+const char* HOST_NAME = "neo-pixel";
 #endif
 
 const char* WIFI_SSID = "DIR-825-A936";
@@ -92,6 +96,10 @@ Device* devices[] = {
 
 #ifdef __ROLLER_BLINDS__
   new RollerBlinds("roller-blinds", D5, D6, D7, D8, LEFT)
+#endif
+
+#ifdef __NEO_PIXEL__
+  new NeoPixel("neo-pixel", D1)
 #endif
 };
 
