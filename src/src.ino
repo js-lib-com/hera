@@ -1,7 +1,6 @@
 #include <ESP8266WiFi.h>
 
 #include "HERA.h"
-#include "E2PROM.h"
 
 //#define __THERMOSTAT__
 //#define __THERMOSTAT_SENSOR__
@@ -10,10 +9,11 @@
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
 //#define __DHT_SENSOR__
+#define __DHT12_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
 //#define __ROLLER_BLINDS__
-#define __NEO_PIXEL__
+//#define __NEO_PIXEL__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -34,6 +34,11 @@ const char* HOST_NAME = "net-switch";
 const char* HOST_NAME = "color-led";
 #endif
 #ifdef __DHT_SENSOR__
+#include "DHTSensor.h"
+const char* HOST_NAME = "dht-sensor";
+#endif
+#ifdef __DHT12_SENSOR__
+#include "DHT12Sensor.h"
 const char* HOST_NAME = "dht-sensor";
 #endif
 #ifdef __LIGHT_DIMMER__
@@ -84,6 +89,10 @@ Device* devices[] = {
   new ColorLED("color-led", D3, D2, D1),
   new LightDimmer("light-dimmer", D7),
   new DHTSensor("dht-sensor", D5, DHT22, 30, 0.5, 0.2)
+#endif
+
+#ifdef __DHT12_SENSOR__
+  new DHT12Sensor("dht-sensor")
 #endif
 
 #ifdef __LIGHT_DIMMER__
