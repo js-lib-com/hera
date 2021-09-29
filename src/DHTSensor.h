@@ -1,56 +1,29 @@
 #ifndef __HERA_DHT_SENSOR
 #define __HERA_DHT_SENSOR
 
-#include "DHT.h"
-#include "Device.h"
+#include <DHT.h>
+#include "VirtualDHTSensor.h"
 
-class DHTSensor: public Device {
-  public:
-    DHTSensor(const char* deviceName, byte port, byte type = DHT22, int period = 0, float humidityThreshold = 0.0, float temperatureThreshold = 0.0);
+class DHTSensor : public VirtualDHTSensor {
+public:
+	DHTSensor(const char* deviceName, byte port, byte type = DHT22, int period = 10, float humidityThreshold = 0.0, float temperatureThreshold = 0.0);
 
-    void setup();
-    void loop();
+private:
+	DHT sensor;
+	static const char* deviceClass;
 
-  protected:
-    String getHumidity(const String& parameter);
-    String getTemperature(const String& parameter);
-    String getValue(const String& parameter);
+protected:
+	virtual void sensorBegin() {
+		sensor.begin();
+	}
 
-  private:
-    float readHumidity();
-    float readTemperature();
+	virtual float sensorHumidity() {
+		return sensor.readHumidity();
+	}
 
-  private:
-    DHT sensor;
-    int period;
-    long timestamp; 
-    float humidityThreshold;
-    float temperatureThreshold;
-    float humidity;
-    float temperature;
-
-  private:
-    static const char* deviceClass;
-    static Action metaActions[];
+	virtual float sensorTemperature() {
+		return sensor.readTemperature();
+	}
 };
 
-inline float DHTSensor::readHumidity() {
-  float humidity = sensor.readHumidity();
-  return isnan(humidity) ? 0.0 : humidity;
-}
-
-inline float DHTSensor::readTemperature() {
-  float temperature = sensor.readTemperature();
-  return isnan(temperature) ? 0.0 : temperature;
-}
-
-inline String DHTSensor::getHumidity(const String& parameter) {
-  return String(readHumidity());
-}
-
-inline String DHTSensor::getTemperature(const String& parameter) {
-  return String(readTemperature());
-}
-
 #endif // __HERA_DHT_SENSOR
-
