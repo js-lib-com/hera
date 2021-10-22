@@ -8,6 +8,7 @@
 class NetSwitch: public Device {
   public:
     NetSwitch(const char* deviceName, const char* targetDeviceName, byte port);
+    NetSwitch(const char* deviceName, const char* targetDeviceName, byte port, PortMode mode);
 
     void setup();
     void loop();

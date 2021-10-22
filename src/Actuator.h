@@ -9,8 +9,8 @@
 
 class Actuator: public Device {
   public:
-    Actuator(const char* deviceName, byte port, OutMode outMode, int pulseLength = 4000, byte eepromAddr = NO_EEPROM);
-    Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
+    Actuator(const char* deviceName, byte port, PortMode outMode, int pulseLength = 4000, byte eepromAddr = NO_EEPROM);
+    Actuator(const char* deviceName, byte port, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
     void ctor();
     void setup();

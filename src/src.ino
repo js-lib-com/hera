@@ -9,11 +9,11 @@
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
 //#define __DHT_SENSOR__
-#define __DHT12_SENSOR__
+//#define __DHT12_SENSOR__
 //#define __LIGHT_DIMMER__
 //#define __RADIO_SWITCH__
 //#define __ROLLER_BLINDS__
-//#define __NEO_PIXEL__
+#define __NEO_PIXEL__
 
 #ifdef __THERMOSTAT__
 const char* HOST_NAME = "thermostat";
@@ -67,7 +67,7 @@ Device* devices[] = {
 #endif
 
 #ifdef __ACTUATOR__
-  new BinaryLight("binary-light-1", D1, D2, DIRECT),
+  new BinaryLight("binary-light-1", D1, DIRECT, D2, DIRECT),
   new Actuator("actuator-3", D3, DIRECT),
   new Actuator("actuator-4", D4, INVERSE)
 #endif
@@ -77,7 +77,7 @@ Device* devices[] = {
 #endif
 
 #ifdef __NET_SWITCH__
-  new NetSwitch("net-switch", "actuator-4", D4)
+  new NetSwitch("net-switch", "actuator-4", D4, INVERSE)
 #endif
 
 #ifdef __COLOR_LED__

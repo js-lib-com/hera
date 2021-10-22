@@ -10,9 +10,11 @@
 
 class BinaryLight : public Device {
   public:
-    BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode, byte eepromAddr = NO_EEPROM);
-    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte eepromAddr = NO_EEPROM);
-    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte bulbPort, PortMode outMode, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, PortMode outMode, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, PortMode inMode, byte bulbPort, PortMode outMode, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
+    BinaryLight(const char* deviceName, byte switchPort, PortMode inMode, byte bulbPort, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr = NO_EEPROM);
 
     void ctor();
     void setup();

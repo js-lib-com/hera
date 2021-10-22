@@ -2,18 +2,21 @@
 #define __HERA_IN_PORT
 
 #include <Arduino.h>
-
-#define PORT_DISABLED -1
+#include "Port.h"
 
 class InPort {
   public:
     InPort(byte port = PORT_DISABLED);
+    InPort(byte port, PortMode mode);
 
     void setup();
     bool pressed();
 
   private:
-    byte port;
+    const byte INACTIVE_LEVEL;
+    const byte ACTIVE_LEVEL;
+
+    const byte port;
 
     // keeps timestamp returned by millis() of the moment input was triggered
     unsigned long triggerTimestamp;
@@ -22,5 +25,6 @@ class InPort {
     byte previousState;
 };
 
-#endif
+#endif // __HERA_IN_PORT
+
 
