@@ -15,7 +15,7 @@ Action Thermostat::metaActions[] = {
   ACTION("getState", &Thermostat::getState),
 };
 
-Thermostat::Thermostat(const char* deviceName, byte port, OutMode outMode, float hysteresis, byte eepromAddr):
+Thermostat::Thermostat(const char* deviceName, byte port, PortMode outMode, float hysteresis, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
   hysteresis(hysteresis),

@@ -1,9 +1,10 @@
 #include "OutPort.h"
 #include "Log.h"
 
-OutPort::OutPort(byte _port, OutMode _outMode) {
-  port = _port;
-  mask = _outMode == DIRECT ? 0 : 1;
+OutPort::OutPort(byte port, PortMode mode):
+  port(port),
+  mask(mode == DIRECT ? 0 : 1)
+{
 }
 
 void OutPort::setup() {

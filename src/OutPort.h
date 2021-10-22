@@ -3,14 +3,11 @@
 
 #include <Arduino.h>
 #include "MessagePublisher.h"
-
-enum OutMode {
-  DIRECT, INVERSE
-};
+#include "Port.h"
 
 class OutPort {
   public:
-    OutPort(byte port, OutMode outMode);
+    OutPort(byte port, PortMode mode);
 
     void setup();
     void setState(byte state);
@@ -19,8 +16,8 @@ class OutPort {
     const char* toString();
 
   private:
-    byte port;
-    byte mask;
+    const byte port;
+    const byte mask;
 };
 
 inline byte OutPort::getState() {

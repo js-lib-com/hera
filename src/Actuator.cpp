@@ -11,7 +11,7 @@ Action Actuator::metaActions[] = {
   ACTION("getState", &Actuator::getState)
 };
 
-Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, int pulseLength, byte eepromAddr):
+Actuator::Actuator(const char* deviceName, byte port, PortMode outMode, int pulseLength, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
   pulseLength(pulseLength),
@@ -23,7 +23,7 @@ Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, int pulse
   ctor();
 }
 
-Actuator::Actuator(const char* deviceName, byte port, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
+Actuator::Actuator(const char* deviceName, byte port, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
   Device(deviceClass, deviceName),
   port(port, outMode),
   pulseLength(0),

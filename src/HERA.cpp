@@ -92,8 +92,10 @@ void HERA::setup(Device** _devices, byte _devicesCount) {
   for (int i = 0; i < devicesCount; ++i) {
     devices[i]->setup();
     MDNS.addService(devices[i]->getName(), SERVICE_PROTO, SERVER_PORT);
+    Log::debug("Device name: ", devices[i]->getName());
   }
   Log::debug("Devices initialized");
+  Log::debug("HERA setup complete");
 }
 
 void HERA::loop() {

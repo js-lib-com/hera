@@ -6,7 +6,7 @@
 
 class Thermostat: public Device {
   public:
-    Thermostat(const char* deviceName, byte port, OutMode outMode, float hysteresis, byte eepromAddr = 0);
+    Thermostat(const char* deviceName, byte port, PortMode outMode, float hysteresis, byte eepromAddr = 0);
     void setup();
 
   protected:

@@ -11,7 +11,7 @@ Action BinaryLight::metaActions[] = {
   ACTION("getState", &BinaryLight::getState)
 };
 
-BinaryLight::BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode, byte eepromAddr):
+BinaryLight::BinaryLight(const char* deviceName, byte bulbPort, PortMode outMode, byte eepromAddr):
   Device(deviceClass, deviceName),
   bulb(bulbPort, outMode),
   indicatorLED(0),
@@ -22,7 +22,7 @@ BinaryLight::BinaryLight(const char* deviceName, byte bulbPort, OutMode outMode,
   ctor();
 }
 
-BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte eepromAddr):
+BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, PortMode outMode, byte eepromAddr):
   Device(deviceClass, deviceName),
   wallSwitch(switchPort),
   bulb(bulbPort, outMode),
@@ -34,9 +34,33 @@ BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort,
   ctor();
 }
 
-BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, OutMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
+BinaryLight::BinaryLight(const char* deviceName, byte switchPort, PortMode inMode, byte bulbPort, PortMode outMode, byte eepromAddr):
+  Device(deviceClass, deviceName),
+  wallSwitch(switchPort, inMode),
+  bulb(bulbPort, outMode),
+  indicatorLED(0),
+  ledOnColor(0),
+  ledOffColor(0),
+  eepromAddr(eepromAddr)
+{
+  ctor();
+}
+
+BinaryLight::BinaryLight(const char* deviceName, byte switchPort, byte bulbPort, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
   Device(deviceClass, deviceName),
   wallSwitch(switchPort),
+  bulb(bulbPort, outMode),
+  ledOnColor(ledOnColor),
+  ledOffColor(ledOffColor),
+  eepromAddr(eepromAddr)
+{
+  indicatorLED = new Adafruit_NeoPixel(1, indicatorPort, NEO_GRB + NEO_KHZ800);
+  ctor();
+}
+
+BinaryLight::BinaryLight(const char* deviceName, byte switchPort, PortMode inMode, byte bulbPort, PortMode outMode, byte indicatorPort, uint32_t ledOnColor, uint32_t ledOffColor, byte eepromAddr):
+  Device(deviceClass, deviceName),
+  wallSwitch(switchPort, inMode),
   bulb(bulbPort, outMode),
   ledOnColor(ledOnColor),
   ledOffColor(ledOffColor),
