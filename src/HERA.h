@@ -17,6 +17,7 @@
 #include "Thermostat.h"
 #include "ThermostatSensor.h"
 #include "PowerMeter.h"
+#include "GasMeter.h"
 #include "NetSwitch.h"
 #include "RollerBlinds.h"
 

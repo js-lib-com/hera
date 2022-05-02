@@ -6,7 +6,7 @@ const char* PowerMeter::deviceClass = "js.hera.dev.PowerMeter";
 
 PowerMeter* powerMeter;
 
-ICACHE_RAM_ATTR void onPulseInterruptHandler() {
+ICACHE_RAM_ATTR void onPowerInterruptHandler() {
   static unsigned long last_interrupt_time = 0;
 
   unsigned long interrupt_time = millis();
@@ -31,7 +31,7 @@ void PowerMeter::setup()
   Log::trace("PowerMeter::setup");
   powerMeter = this;
   pinMode(pin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(pin), onPulseInterruptHandler, RISING);
+  attachInterrupt(digitalPinToInterrupt(pin), onPowerInterruptHandler, RISING);
 }
 
 void PowerMeter::loop()

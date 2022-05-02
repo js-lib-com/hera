@@ -22,7 +22,9 @@ class ColorLED: public Device {
 
   private:
     void update();
+    int color();
     int pwm(byte colorComponent);
+    String state();
 
   private:
     byte redPort;
@@ -44,7 +46,7 @@ class ColorLED: public Device {
 };
 
 inline String ColorLED::getColor(const String& parameter) {
-  return String(red << 16 | green << 8 | blue);
+  return String(color());
 }
 
 inline String ColorLED::getBrightness(const String& parameter) {
@@ -60,7 +62,11 @@ inline String ColorLED::turnOFF(const String& parameter) {
 }
 
 inline String ColorLED::getState(const String& parameter) {
-  return active ? "1" : "0";
+  return state();
+}
+
+inline int ColorLED::color() {
+  return red << 16 | green << 8 | blue;
 }
 
 inline int ColorLED::pwm(byte colorComponent) {

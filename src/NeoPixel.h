@@ -23,13 +23,17 @@ class NeoPixel: public Device {
     String getState(const String& parameter);
 
   private:
+    int color();
+    String state();
+
+  private:
     Adafruit_NeoPixel* led;
 
     byte red;
     byte green;
     byte blue;
     float brightness;
-    
+
     boolean active;
 
   private:
@@ -38,7 +42,7 @@ class NeoPixel: public Device {
 };
 
 inline String NeoPixel::getColor(const String& parameter) {
-  return String(red << 16 | green << 8 | blue);
+  return String(color());
 }
 
 inline String NeoPixel::getBrightness(const String& parameter) {
@@ -54,7 +58,11 @@ inline String NeoPixel::turnOFF(const String& parameter) {
 }
 
 inline String NeoPixel::getState(const String& parameter) {
-  return active ? "1" : "0";
+  return state();
+}
+
+inline int NeoPixel::color() {
+  return red << 16 | green << 8 | blue;
 }
 
 #endif

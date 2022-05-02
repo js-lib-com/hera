@@ -6,6 +6,7 @@
 //#define __THERMOSTAT_SENSOR__
 //#define __ACTUATOR__
 //#define __POWER_METER__
+//#define __GAS_METER__
 //#define __NET_SWITCH__
 //#define __COLOR_LED__
 //#define __DHT_SENSOR__
@@ -26,6 +27,9 @@ const char* HOST_NAME = "actuators";
 #endif
 #ifdef __POWER_METER__
 const char* HOST_NAME = "power-meter";
+#endif
+#ifdef __GAS_METER__
+const char* HOST_NAME = "gas-meter";
 #endif
 #ifdef __NET_SWITCH__
 const char* HOST_NAME = "net-switch";
@@ -76,6 +80,10 @@ Device* devices[] = {
   new PowerMeter("power-meter", D4)
 #endif
 
+#ifdef __GAS_METER__
+  new GasMeter("gas-meter", D4)
+#endif
+
 #ifdef __NET_SWITCH__
   new NetSwitch("net-switch", "actuator-4", D4, INVERSE)
 #endif
@@ -108,7 +116,8 @@ Device* devices[] = {
 #endif
 
 #ifdef __NEO_PIXEL__
-  new NeoPixel("neo-pixel", D1)
+  new NeoPixel("neo-pixel", D1),
+  new LightDimmer("light-dimmer", D4)
 #endif
 };
 

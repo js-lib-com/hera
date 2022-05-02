@@ -57,3 +57,12 @@ void LightDimmer::update() {
   analogWrite(port, pwd);
 }
 
+String LightDimmer::state() {
+  String state = "{\"value\":";
+  state += value;
+  state += ",\"active\":";
+  state += (active ? "true" : "false");
+  state += "}";
+  return state;
+}
+

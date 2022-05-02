@@ -63,19 +63,19 @@ String ColorLED::setColor(const String& parameter) {
   }
 
   update();
-  return getColor(parameter);
+  return state();
 }
 
 String ColorLED::setBrightness(const String& parameter) {
   brightness = parameter.toFloat();
   update();
-  return getBrightness(parameter);
+  return state();
 }
 
 String ColorLED::setState(const String& parameter) {
   active = parameter.toInt() == 1;
   update();
-  return getState(parameter);
+  return state();
 }
 
 void ColorLED::update() {
@@ -84,3 +84,19 @@ void ColorLED::update() {
   analogWrite(bluePort, pwm(blue));
 }
 
+String ColorLED::state() {
+  String state = "{\"red\":";
+  state += red;
+  state += ",\"green\":";
+  state += green;
+  state += ",\"blue\":";
+  state += blue;
+  state += ",\"color\":";
+  state += color();
+  state += ",\"brightness\":";
+  state += brightness;
+  state += ",\"active\":";
+  state += (active ? "true" : "false");
+  state += "}";
+  return state;
+}
