@@ -60,14 +60,5 @@ inline String LightDimmer::getState(const String& parameter) {
   return state();
 }
 
-inline String LightDimmer::state() {
-  String state = "{\"value\":";
-  state += value;
-  state += ",\"active\":";
-  state += (active ? "true" : "false");
-  state += "}";
-  return state;
-}
-
 #endif // __HERA_LIGHT_DIMMER
 

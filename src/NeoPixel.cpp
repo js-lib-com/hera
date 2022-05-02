@@ -38,25 +38,46 @@ String NeoPixel::setColor(const String& parameter) {
   red = (color >> 16) & 0xff;
   green = (color >> 8) & 0xff;
   blue = (color) & 0xff;
-  led->setPixelColor(0, red, green, blue);
-  led->show();
-  return getColor(parameter);
+  if (active) {
+    led->setPixelColor(0, red, green, blue);
+    led->show();
+  }
+  return state();
 }
 
 String NeoPixel::setBrightness(const String& parameter) {
   brightness = parameter.toFloat();
   led->setBrightness(brightness);
-  return getBrightness(parameter);
+  return state();
 }
 
 String NeoPixel::setState(const String& parameter) {
   active = parameter.toInt() == 1;
   if (active) {
+    led->setPixelColor(0, red, green, blue);
     led->show();
   }
   else {
-    led->clear();
+    led->setPixelColor(0, 0, 0, 0);
+    led->show();
   }
-  return getState(parameter);
+  return state();
+}
+
+String NeoPixel::state() {
+  String state = "{\"red\":";
+  state += red;
+  state += ",\"green\":";
+  state += green;
+  state += ",\"blue\":";
+  state += blue;
+  state += ",\"color\":";
+  state += color();
+  state += ",\"brightness\":";
+  state += brightness;
+  state += ",\"active\":";
+  state += (active ? "true" : "false");
+  state += "}";
+  return state;
 }
 
